@@ -1,0 +1,57 @@
+
+
+# Variable reduction
+
+This section details the variable reduction technique from Harrell's Regression Modeling Strategies that we used to reduce the number of variables used in the analysis.
+
+
+The data was split into training (80%) and testing (20%) sets.
+
+```{r}
+sages_juiced_rms <- readRDS(file=fs::path(r_objects_folder, "060_sages_juiced_rms.rds"))
+sages_reduced <- readRDS(file=fs::path(r_objects_folder, "060_sages_reduced.rds"))
+sages_combined <-   readRDS(file=fs::path(r_objects_folder, "020_sages_combined.rds"))
+variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
+
+covariates_to_use <- variable_df %>%
+  filter(covariates_to_use_2) %>%
+  pull(covariates_all)
+covariates_to_use <- covariates_to_use[!covariates_to_use %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]
+sages_combined <- sages_combined %>%
+  select(any_of(covariates_to_use))
+
+```
+
+
+```{r}
+covariates_dropped_nzv <- names(sages_combined)[!(names(sages_combined) %in% names(sages_juiced_rms))]
+covariates_not_dropped_nzv <- names(sages_combined)[(names(sages_combined) %in% names(sages_juiced_rms))]
+```
+
+Of the `r length(covariates_to_use)` variables we start with, we dropped `r length(covariates_dropped_nzv)` of them for not having a lot of variability.
+
+These are the variables that were dropped:
+```{r}
+sages_combined %>%
+  select(all_of(covariates_dropped_nzv)) %>%
+  gtsummary::tbl_summary()
+```
+
+```{r}
+covariates_dropped_rms <- names(sages_juiced_rms)[!(names(sages_juiced_rms) %in% names(sages_reduced))]
+covariates_not_dropped_rms <- names(sages_juiced_rms)[(names(sages_juiced_rms) %in% names(sages_reduced))]
+```
+
+Of the `r length(covariates_not_dropped_nzv)` variables retained, `r length(covariates_dropped_rms)` were dropped due to redundancy.
+
+These are the variables that were dropped:
+
+```{r}
+sages_combined %>%
+  select(all_of(covariates_dropped_rms)) %>%
+  gtsummary::tbl_summary()
+```
+
+There are `r length(covariates_not_dropped_rms)` variables retained after the redundancy analysis.
+
+

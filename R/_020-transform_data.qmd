@@ -1,0 +1,19 @@
+
+```{r}
+sages_combined <- readRDS(file=fs::path(r_objects_folder, "020_sages_combined.rds"))
+sages_combined_pre_imp <- readRDS(file=fs::path(r_objects_folder, "020_sages_combined_pre_imp.rds"))
+covariates_excessive_missing <- readRDS(file=fs::path(r_objects_folder, "020_covariates_excessive_missing.rds"))
+
+```
+
+# Non-lab data
+
+## Missingness
+
+These were the variables that were dropped for having more than 50% missingness: `r covariates_excessive_missing`.
+
+Imputation was done on the remaining lab values using predictive mean matching.
+
+
+
+

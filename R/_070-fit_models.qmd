@@ -1,0 +1,106 @@
+
+# Fitting the models
+
+The training data was into 10 cross-validation sets.
+
+Model tuning
+
+The elastic net, random forest, and gradient boosted models, the models were tuned using 25 sets of possible values.
+
+These are the hyperparameters that were tuned:
+Elastic net: alpha (mixture between lasso and ridge regression)
+Random forest: number of trees, min sample size in each node
+Gradient boosted model: number of trees, the learning rate
+
+```{r}
+# glm_res    <- readRDS(file=fs::path(r_objects_folder, "070_glm_res.rds"))
+glmnet_res <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res.rds"))
+rf_res     <- readRDS(file=fs::path(r_objects_folder, "070_rf_res.rds"))
+lgbm_res   <- readRDS(file=fs::path(r_objects_folder, "070_lgbm_res.rds"))
+
+glmnet_final  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final.rds"))
+rf_final      <- readRDS(file=fs::path(r_objects_folder, "070_rf_final.rds"))
+lgbm_final    <- readRDS(file=fs::path(r_objects_folder, "070_lgbm_final.rds"))
+
+```
+
+These are the hyperparameters that have the best RMSE for the elastic net model.
+```{r}
+# collect_metrics(glm_res)
+# collect_metrics(glmnet_res)
+autoplot(glmnet_res)
+show_best(glmnet_res, metric = "rmse")
+
+
+```
+
+These are the hyperparameters that have the best RMSE for the random forest model.
+```{r}
+# collect_metrics(rf_res)
+autoplot(rf_res)
+show_best(rf_res, metric = "rmse")
+
+```
+
+These are the hyperparameters that have the best RMSE for the gradient boosted model.
+```{r}
+# collect_metrics(lgbm_res)
+autoplot(lgbm_res)
+show_best(lgbm_res, metric = "rmse")
+
+```
+
+
+# Performance in testing set
+
+## Elastic net
+
+```{r}
+collect_metrics(glmnet_final)
+glmnet_final %>%
+  collect_predictions() %>%
+  cal_plot_regression(
+    truth = vdgcp_slope36m,
+    estimate = .pred,
+    alpha = .5
+  ) +
+  ggtitle("Elastic net - Testing set") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+
+## Random forest
+
+```{r}
+collect_metrics(rf_final)
+rf_final %>%
+  collect_predictions() %>%
+  cal_plot_regression(
+    truth = vdgcp_slope36m,
+    estimate = .pred,
+    alpha = .5
+  ) +
+  ggtitle("Random forest - Testing set") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+
+## Gradient boosted model
+
+```{r}
+collect_metrics(lgbm_final)
+lgbm_final %>%
+  collect_predictions() %>%
+  cal_plot_regression(
+    truth = vdgcp_slope36m,
+    estimate = .pred,
+    alpha = .5
+  ) +
+  ggtitle("Gradient boosted model - Testing set") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+

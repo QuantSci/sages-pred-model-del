@@ -1,0 +1,29 @@
+
+```{r}
+variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
+sages_combined <- readRDS(file=fs::path(r_objects_folder, "020_sages_combined.rds"))
+```
+
+# The variables
+
+```{r}
+covariates_to_use <- variable_df %>%
+  filter(covariates_to_use_2) %>%
+  pull(covariates_all)
+
+covariates_to_use <- covariates_to_use[!covariates_to_use %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]
+```
+
+There are `r length(covariates_to_use)` variables being considered for this analysis.
+
+```{r}
+sages_combined %>%
+  select(all_of(covariates_to_use)) %>%
+  labelled::var_label() %>%
+  as_tibble() %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "label") %>%
+  gt::gt()
+
+
+
+```

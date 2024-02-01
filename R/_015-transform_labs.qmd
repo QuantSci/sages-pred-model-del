@@ -1,0 +1,69 @@
+
+```{r}
+sages_mr <- readRDS(file=fs::path(r_objects_folder, "015_sages_mr.rds"))
+sages_mr_pre_imp <- readRDS(file=fs::path(r_objects_folder, "015_sages_mr_pre_imp.rds"))
+covariates_excessive_missing_labs <- readRDS(file=fs::path(r_objects_folder, "015_covariates_excessive_missing_labs.rds"))
+
+```
+
+# Summary of lab values
+
+## Missing values
+
+These are the lab values that were dropped for having more than 50% missing values:
+
+```{r}
+
+sages_mr_pre_imp %>%
+  select(all_of(covariates_excessive_missing_labs)) %>%
+  gtsummary::tbl_summary()
+
+```
+
+Imputation was done on the remaining lab values using predictive mean matching.
+
+## Indicator variables
+
+Indicator variables for low and high values were created for the lab values. 
+
+This section provides summary statistics of whether the lab values met a clinically relevant cutoff.
+
+## Pre-op labs
+
+### Pre-op labs - any abnormality
+
+Note: BUN/CRE ratio and Anion Gap thresholds were not updated and used values from previous work.
+
+```{r}
+sages_mr %>%
+  select(starts_with("lab")) %>%
+  select(dplyr::contains(".1.")) %>%
+  select(ends_with("abnormal")) %>%
+gtsummary::tbl_summary()
+
+```
+
+
+### POD1 labs
+
+```{r}
+sages_mr %>%
+  select(starts_with("lab")) %>%
+  select(dplyr::contains(".2.")) %>%
+  select(ends_with("abnormal")) %>%
+gtsummary::tbl_summary()
+
+```
+
+### POD2 labs
+
+```{r}
+sages_mr %>%
+  select(starts_with("lab")) %>%
+  select(dplyr::contains(".3.")) %>%
+  select(ends_with("abnormal")) %>%
+gtsummary::tbl_summary()
+
+```
+
+
