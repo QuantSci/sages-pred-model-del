@@ -23,7 +23,4 @@ sages_combined %>%
   as_tibble() %>%
   pivot_longer(everything(), names_to = "variable", values_to = "label") %>%
   gt::gt()
-
-
-
 ```

@@ -1,4 +1,9 @@
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 # Variable reduction
 
@@ -28,6 +33,12 @@ covariates_dropped_nzv <- names(sages_combined)[!(names(sages_combined) %in% nam
 covariates_not_dropped_nzv <- names(sages_combined)[(names(sages_combined) %in% names(sages_juiced_rms))]
 ```
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 Of the `r length(covariates_to_use)` variables we start with, we dropped `r length(covariates_dropped_nzv)` of them for not having a lot of variability.
 
 These are the variables that were dropped:
@@ -43,6 +54,12 @@ covariates_dropped_rms <- names(sages_juiced_rms)[!(names(sages_juiced_rms) %in%
 covariates_not_dropped_rms <- names(sages_juiced_rms)[(names(sages_juiced_rms) %in% names(sages_reduced))]
 ```
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+ 
 Of the `r length(covariates_not_dropped_nzv)` variables retained, `r length(covariates_dropped_rms)` were dropped due to redundancy.
 
 These are the variables that were dropped:
@@ -53,6 +70,24 @@ sages_combined %>%
   gtsummary::tbl_summary()
 ```
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+### List of predictive features after dropping for missingness, low variance, and redundancy:
+
 There are `r length(covariates_not_dropped_rms)` variables retained after the redundancy analysis.
+
+```{r}
+sages_combined %>%
+  select(any_of(covariates_not_dropped_rms)) %>% 
+  labelled::var_label() %>%
+  as_tibble() %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "label") %>%
+  gt::gt()
+```
+
 
 

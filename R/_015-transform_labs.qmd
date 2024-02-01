@@ -22,6 +22,12 @@ sages_mr_pre_imp %>%
 
 Imputation was done on the remaining lab values using predictive mean matching.
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 ## Indicator variables
 
 Indicator variables for low and high values were created for the lab values. 
@@ -44,6 +50,12 @@ gtsummary::tbl_summary()
 ```
 
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 ### POD1 labs
 
 ```{r}
@@ -53,6 +65,12 @@ sages_mr %>%
   select(ends_with("abnormal")) %>%
 gtsummary::tbl_summary()
 
+```
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
 ### POD2 labs

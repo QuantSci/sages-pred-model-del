@@ -6,13 +6,23 @@ covariates_excessive_missing <- readRDS(file=fs::path(r_objects_folder, "020_cov
 
 ```
 
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 # Non-lab data
 
 ## Missingness
 
-These were the variables that were dropped for having more than 50% missingness: `r covariates_excessive_missing`.
+These were the variables that were dropped for having more than 50% missingness: **`r covariates_excessive_missing`**.
 
 Imputation was done on the remaining lab values using predictive mean matching.
+
+
+
+
 
 
 

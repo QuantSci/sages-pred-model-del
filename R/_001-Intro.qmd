@@ -4,7 +4,7 @@
 
 The overall goal is to build a prediction model for delirium and cognitive decline.
 
-## Today's (2024-02-03) goal
+## Today's (2024-02-02) goal
 
 Review the variables that made it through our selection process for inclusion into the model.
 
@@ -19,3 +19,10 @@ There are many interesting variables that could possibly included in our model. 
 3.  Variables that are redundant with each other will be dropped. If a variable that can be reasonably well predicted by other variables in the model, then that variable is not providing much more to the model.
 
 4.  The remaining variables will be combined into principal components.
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
