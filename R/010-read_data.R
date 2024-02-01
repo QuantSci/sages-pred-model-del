@@ -15,12 +15,7 @@
 # vdgcp_slope36m = the slope at 36M from the quadratic model
 # vdgcp_change36m = the change from from baseline to 36M from the quadratic model
 
-if (Sys.getenv("USER") != "rnj") {
-  sages_slope_36M <- haven::read_dta(fs::path(sagesdatafolder, "derived", "clean", "processingfiles", "SAGES-Subject-Interview-Data-Analysis-File.dta"))
-}
-if (Sys.getenv("USER") == "rnj") {
-  sages_slope_36M <- haven::read_dta(fs::path(sagesdatafolder.frozen, "SAGES-Subject-Interview-Data-Analysis-File.dta"))
-}
+sages_slope_36M <- haven::read_dta(fs::path(sagesdatafolder.frozen, "SAGES-Subject-Interview-Data-Analysis-File.dta"))
 attributes(sages_slope_36M$studyid) <- NULL
 
 sages_slope_36M <- sages_slope_36M %>%
@@ -79,12 +74,7 @@ sages_proxy_interview <- sages_proxy_interview %>%
   rename(vdiqc_proxy = vdiqc)
 
 # Get APOE4 status    
-if (Sys.getenv("USER") != "rnj") {
-  sages_apoe <- haven::read_dta(fs::path(sagesdatafolder, "Source", "Project2", "apoefinal_051914.dta"))
-}
-if (Sys.getenv("USER") == "rnj") {
-  sages_apoe <- haven::read_dta(fs::path(sagesdatafolder.frozen, "apoefinal_051914.dta"))
-}
+sages_apoe <- haven::read_dta(fs::path(sagesdatafolder.frozen, "apoefinal_051914.dta"))
 names(sages_apoe) <- tolower(names(sages_apoe))
 attributes(sages_apoe$studyid) <- NULL
 sages_apoe <- sages_apoe %>%
@@ -109,18 +99,15 @@ sages_mr <- sages_mr %>%
          "lab02e", "lab03e", "lab04e", "lab05e") %>%
   filter(str_detect(studyid, "S")) 
 
-if (Sys.getenv("USER") != "rnj") {
-  sages_rnj <- haven::read_dta(fs::path(sagesdatafolder, "derived", "sages-pred-models", "w71.dta"))
-}
-if (Sys.getenv("USER") == "rnj") {
-  sages_rnj <- haven::read_dta(fs::path(sagesdatafolder.frozen, "w71.dta"))
-}
+
+sages_rnj <- haven::read_dta(fs::path(sagesdatafolder.frozen, "w71.dta"))
+
 
 sages_rnj <- sages_rnj %>%
   select(-n560, -vdp41711, -vdp41712, -vdp41713, -vdp41714, -vdp41715, -vdp41716, -vdp41717, -vdp44702) 
 
 
-n560 <- haven::read_dta(fs::path(sagesdatafolder.frozen, "n560.dta"))[c("studyid")]
+n560 <- haven::read_dta(fs::path(sagesdatafolder.frozen, "n560.dta"))
 
 sages_apoe            <- dplyr::semi_join(sages_apoe            , n560, by = "studyid")
 sages_del_assessment  <- dplyr::semi_join(sages_del_assessment  , n560, by = "studyid")

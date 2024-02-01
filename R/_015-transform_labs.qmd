@@ -16,7 +16,10 @@ These are the lab values that were dropped for having more than 50% missing valu
 
 sages_mr_pre_imp %>%
   select(all_of(covariates_excessive_missing_labs)) %>%
-  gtsummary::tbl_summary()
+  gtsummary::tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})")
+    )
 
 ```
 
@@ -45,7 +48,10 @@ sages_mr %>%
   select(starts_with("lab")) %>%
   select(dplyr::contains(".1.")) %>%
   select(ends_with("abnormal")) %>%
-gtsummary::tbl_summary()
+gtsummary::tbl_summary(
+  statistic = list(
+      all_continuous() ~ "{mean} ({sd})")
+)
 
 ```
 
@@ -63,7 +69,10 @@ sages_mr %>%
   select(starts_with("lab")) %>%
   select(dplyr::contains(".2.")) %>%
   select(ends_with("abnormal")) %>%
-gtsummary::tbl_summary()
+gtsummary::tbl_summary(
+  statistic = list(
+      all_continuous() ~ "{mean} ({sd})")
+)
 
 ```
 
@@ -80,7 +89,10 @@ sages_mr %>%
   select(starts_with("lab")) %>%
   select(dplyr::contains(".3.")) %>%
   select(ends_with("abnormal")) %>%
-gtsummary::tbl_summary()
+gtsummary::tbl_summary(
+  statistic = list(
+      all_continuous() ~ "{mean} ({sd})")
+)
 
 ```
 

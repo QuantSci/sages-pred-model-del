@@ -10,7 +10,6 @@
 This section details the variable reduction technique from Harrell's Regression Modeling Strategies that we used to reduce the number of variables used in the analysis.
 
 
-The data was split into training (80%) and testing (20%) sets.
 
 ```{r}
 sages_juiced_rms <- readRDS(file=fs::path(r_objects_folder, "060_sages_juiced_rms.rds"))
@@ -46,12 +45,17 @@ These are the variables that were dropped:
 ```{r}
 sages_combined %>%
   select(all_of(covariates_dropped_nzv)) %>%
-  gtsummary::tbl_summary()
+  gtsummary::tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})")
+  )
 ```
 
 ```{r}
-covariates_dropped_rms <- names(sages_juiced_rms)[!(names(sages_juiced_rms) %in% names(sages_reduced))]
-covariates_not_dropped_rms <- names(sages_juiced_rms)[(names(sages_juiced_rms) %in% names(sages_reduced))]
+covariates_sages_juiced <- names(sages_juiced_rms)
+covariates_sages_juiced <- covariates_sages_juiced[!covariates_sages_juiced %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]
+covariates_dropped_rms <- covariates_sages_juiced[!(covariates_sages_juiced %in% names(sages_reduced))]
+covariates_not_dropped_rms <- covariates_sages_juiced[(covariates_sages_juiced %in% names(sages_reduced))]
 ```
 
 <!-- This will insert a page break  -->
@@ -67,7 +71,11 @@ These are the variables that were dropped:
 ```{r}
 sages_combined %>%
   select(all_of(covariates_dropped_rms)) %>%
-  gtsummary::tbl_summary()
+  gtsummary::tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})"),
+    type = c(vdp41506, vdp41511, vdp41513) ~ "continuous"
+  )
 ```
 
 <!-- This will insert a page break  -->

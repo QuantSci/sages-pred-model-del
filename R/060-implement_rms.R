@@ -19,20 +19,20 @@ glimpse(sages_combined)
 
 
 # Ch 6 - Set up the model
-set.seed(222)
-# Put 80% of the data into the training set 
-sages_split <- rsample::initial_split(sages_combined, prop = .8)
-
-# Create data frames for the two sets:
-sages_train_pre_rms <- rsample::training(sages_split)
-sages_test_pre_rms  <- rsample::testing(sages_split)
+# set.seed(222)
+# # Put 80% of the data into the training set 
+# sages_split <- rsample::initial_split(sages_combined, prop = .8)
+# 
+# # Create data frames for the two sets:
+# sages_train_pre_rms <- rsample::training(sages_split)
+# sages_test_pre_rms  <- rsample::testing(sages_split)
 
 
 
 # Ch 8 - Create the recipe
 # Start the recipe to do the RMS redundancy analysis
 # Remove variables with (near)zero variance, otherwise the redundancy analysis won't work
-sages_recipe_rms <- recipes::recipe(vdgcp_slope36m ~ ., data = sages_train_pre_rms) %>%
+sages_recipe_rms <- recipes::recipe(vdgcp_slope36m ~ ., data = sages_combined) %>%
   recipes::step_nzv(all_predictors())
 
 
