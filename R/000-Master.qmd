@@ -36,6 +36,8 @@ source(here::here("r", "060-implement_rms.r"))
 
 ```
 
+{{< include _001-intro.qmd >}}
+
 {{< include _010-read_data.qmd >}}
 
 {{< include _015-transform_labs.qmd >}}

@@ -1,0 +1,21 @@
+# Goals
+
+## Overall goal
+
+The overall goal is to build a prediction model for delirium and cognitive decline.
+
+## Today's (2024-02-03) goal
+
+Review the variables that made it through our selection process for inclusion into the model.
+
+# Background
+
+There are many interesting variables that could possibly included in our model. There are too many to reasonably include in any type of model given our sample size. So, we need a process to trim down our candidate variable list. The process we will use involves two (three?, four?) steps.
+
+1.  Variables with more than 50% missingness will be dropped. Those with less than 50% missingness will have values imputed using predictive mean matching.
+
+2.  Variables that lack any variability will be dropped. If a variable is an indicator for whether something happened, and only a few participants experienced the event, then even if the indicator is clinically meaningful, it will be dropped because it will make a poor predictor in the model.
+
+3.  Variables that are redundant with each other will be dropped. If a variable that can be reasonably well predicted by other variables in the model, then that variable is not providing much more to the model.
+
+4.  The remaining variables will be combined into principal components.

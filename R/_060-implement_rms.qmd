@@ -31,6 +31,7 @@ covariates_not_dropped_nzv <- names(sages_combined)[(names(sages_combined) %in% 
 Of the `r length(covariates_to_use)` variables we start with, we dropped `r length(covariates_dropped_nzv)` of them for not having a lot of variability.
 
 These are the variables that were dropped:
+
 ```{r}
 sages_combined %>%
   select(all_of(covariates_dropped_nzv)) %>%
