@@ -18,7 +18,7 @@ sages_combined <-   readRDS(file=fs::path(r_objects_folder, "020_sages_combined.
 variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
 
 covariates_to_use <- variable_df %>%
-  filter(covariates_to_use_2) %>%
+  filter(covariates_to_use_3) %>%
   pull(covariates_all)
 covariates_to_use <- covariates_to_use[!covariates_to_use %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]
 sages_combined <- sages_combined %>%
@@ -74,7 +74,7 @@ sages_combined %>%
   gtsummary::tbl_summary(
     statistic = list(
       all_continuous() ~ "{mean} ({sd})"),
-    type = c(vdp41506, vdp41511, vdp41513) ~ "continuous"
+    # type = c(vdp41506, vdp41511, vdp41513) ~ "continuous"
   )
 ```
 
