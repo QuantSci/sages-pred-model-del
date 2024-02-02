@@ -275,26 +275,26 @@ labelled::var_label(sages_subject$vdiadlany) <- "IADL (any)"
 labelled::var_label(sages_subject$vdiadlanyc) <- "IADL cognitive (any)"
 labelled::var_label(sages_subject$vdgds15) <- "Geriatric Depression Scale Score  (/15 Points)"
 labelled::var_label(sages_subject$vdhearingimp) <- "Hearing impairment"
-labelled::var_label(sages_subject$vddrisk93_1) <- "vdrisk93_1"
-labelled::var_label(sages_subject$vdfriedfrail1) <- "Fraility - Weight Loss"
-labelled::var_label(sages_subject$vdfriedfrail2) <- "Fraility - 2"
-labelled::var_label(sages_subject$vdfriedfrail3) <- "Fraility - 3"
-labelled::var_label(sages_subject$vdfriedfrail4) <- "Fraility - Low Grip Strength"
-labelled::var_label(sages_subject$vdfriedfrail5) <- "Fraility - Low Timed Walk"
+labelled::var_label(sages_subject$vddrisk93_1) <- "Vision Impairment"
+labelled::var_label(sages_subject$vdfriedfrail1) <- "Frailty - Weight Loss"
+labelled::var_label(sages_subject$vdfriedfrail2) <- "Frailty - Exhaustion"
+labelled::var_label(sages_subject$vdfriedfrail3) <- "Frailty - Low Physical Activity"
+labelled::var_label(sages_subject$vdfriedfrail4) <- "Frailty - Low Grip Strength"
+labelled::var_label(sages_subject$vdfriedfrail5) <- "Frailty - Low Timed Walk"
 labelled::var_label(sages_subject$vdsurg) <- "Surgery"
 labelled::var_label(sages_subject$vdcrp_preop) <- "CRP - preop"
 labelled::var_label(sages_subject$vdcrp_pod2) <- "CRP - POD2"
 labelled::var_label(sages_subject$vd3ms) <- "3MS Score"
 labelled::var_label(sages_subject$vdbmi3) <- "BMI"
 labelled::var_label(sages_subject$vdesl) <- "English is second language"
-labelled::var_label(sages_subject$vdsf12pf) <- "vdsf12pf"
-labelled::var_label(sages_subject$vdsf12rp) <- "vdsf12rp"
-labelled::var_label(sages_subject$vdsf12bp) <- "vdsf12bp"
-labelled::var_label(sages_subject$vdsf12gh) <- "vdsf12gh"
-labelled::var_label(sages_subject$vdsf12vt) <- "vdsf12vt"
-labelled::var_label(sages_subject$vdsf12sf) <- "vdsf12sf"
-labelled::var_label(sages_subject$vdsf12re) <- "vdsf12re"
-labelled::var_label(sages_subject$vdsf12mh) <- "vdsf12mh"
+labelled::var_label(sages_subject$vdsf12pf) <- "SF12 - Physical Functioning"
+labelled::var_label(sages_subject$vdsf12rp) <- "SF12 - Role Physical"
+labelled::var_label(sages_subject$vdsf12bp) <- "SF12 - Bodily Pain"
+labelled::var_label(sages_subject$vdsf12gh) <- "SF12 - General Health"
+labelled::var_label(sages_subject$vdsf12vt) <- "SF12 - Vitality"
+labelled::var_label(sages_subject$vdsf12sf) <- "SF12 - Social Functioning"
+labelled::var_label(sages_subject$vdsf12re) <- "SF12 - Role Emotional"
+labelled::var_label(sages_subject$vdsf12mh) <- "SF12 - Mental Health"
 
 # labeling apoe
 sages_apoe <- sages_apoe %>%
@@ -311,19 +311,60 @@ labelled::var_label(sages_slopes_48M$vdgcp_slope48m) <- "Estimated slope, 2-48 m
 labelled::var_label(sages_proxy_interview$vdiqc_proxy) <- "IQCODE, Proxy Report"
 
 sages_rnj <- sages_rnj %>%
-  mutate_at(vars(vdp41301, vdp41302, vdp41303, vdp41304,
-                 vdp41311, vdp41312, vdp41313, vdp41314, vdp41315, 
-                 vdp41316, vdp41317, vdp41318, vdp41319, vdp41320, 
-                 vdp41321, vdp41322, vdp41323, vdp41324, vdp41325, 
-                 vdp41326, vdp41327, vdp41328, vdp41329, vdp41330, vdp41331,
-                 vdp41501, vdp41502, vdp41503, vdp41504, vdp41505,
-                 vdp41510, vdp41515, vdp41516,
-                 vdp41721, vdp41722, vdp41723, vdp41724, vdp41725, vdp41726, vdp41727,
-                 vdp41901,
-                 vdp42303, vdp42304, vdp42305, vdp42309,
-                 vdp42701, vdp42702,
-                 vdp43301,
-                 vdp44701,), factor)
+  mutate(vdp41301 = factor(vdp41301, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41302 = factor(vdp41302, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41303 = factor(vdp41303, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41304 = factor(vdp41304, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41311 = factor(vdp41311, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41312 = factor(vdp41312, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41313 = factor(vdp41313, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41314 = factor(vdp41314, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41315 = factor(vdp41315, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41316 = factor(vdp41316, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41317 = factor(vdp41317, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41318 = factor(vdp41318, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41319 = factor(vdp41319, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41320 = factor(vdp41320, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41321 = factor(vdp41321, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41322 = factor(vdp41322, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41323 = factor(vdp41323, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41324 = factor(vdp41324, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41325 = factor(vdp41325, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41326 = factor(vdp41326, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41327 = factor(vdp41327, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41328 = factor(vdp41328, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41329 = factor(vdp41329, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41330 = factor(vdp41330, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41331 = factor(vdp41331, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41501 = factor(vdp41501, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41502 = factor(vdp41502, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41503 = factor(vdp41503, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41504 = factor(vdp41504, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41505 = factor(vdp41505, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41510 = factor(vdp41510, levels = c(0, 1, 2), labels = c("0", "1", "2")),
+         vdp41510 = fct_collapse((vdp41510), "0" = "0", "1_2" = c("1", "2")),
+         vdp41515 = factor(vdp41515, levels = c(0, 1, 2, 3), labels = c("0", "1", "2", "3")),
+         vdp41515 = fct_collapse((vdp41515), "0" = "0", "1" = "1", "2_3" = c("2", "3")),
+         vdp41516 = factor(vdp41516, levels = c(0, 1, 2, 3, 4, 5, 6, 9), labels = c("0", "1", "2", "3", "4", "5", "6", "9")),
+         vdp41516 = fct_collapse((vdp41516), "0" = "0", "1" = "1", "2" = "2", "3" = "3", "4_9" = c("4", "5", "6", "9")),
+         vdp41721 = factor(vdp41721, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41722 = factor(vdp41722, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41723 = factor(vdp41723, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41724 = factor(vdp41724, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41725 = factor(vdp41725, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41726 = factor(vdp41726, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41727 = factor(vdp41727, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp41901 = factor(vdp41901, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp42303 = factor(vdp42303, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp42304 = factor(vdp42304, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp42305 = factor(vdp42305, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp42309 = factor(vdp42309, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp42701 = factor(vdp42701, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp42702 = factor(vdp42702, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp43301 = factor(vdp43301, levels = c(0, 1), labels = c("No", "Yes")),
+         vdp44701 = factor(vdp44701, levels = c(0, 1, 2, 3), labels = c("No clincial imaging", "Low prob of impactful abnormality", "Mid prob of impactful abnormality", "High prob of impactful abnormality")),
+         )
+
 labelled::var_label(sages_rnj$vdp41301) <- "Anesthesia: general"
 labelled::var_label(sages_rnj$vdp41302) <- "Anesthesia: spinal"
 labelled::var_label(sages_rnj$vdp41303) <- "Anesthesia: regional"

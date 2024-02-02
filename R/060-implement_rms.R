@@ -15,7 +15,7 @@ sages_combined <- haven::zap_formats(sages_combined)
 sages_combined <- haven::zap_label(sages_combined)
 sages_combined <- sages_combined %>%
   select(-vdsagesdeliriumever, -vdgcp_slope48m)
-glimpse(sages_combined)
+# glimpse(sages_combined)
 
 
 # Ch 6 - Set up the model
