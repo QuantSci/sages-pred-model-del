@@ -1,0 +1,42 @@
+
+
+```{r}
+n_pc_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_n_pc_to_keep.rds"))
+sages_juiced2 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced2.rds"))
+
+```
+
+## Principal component analysis
+
+After the redundancy analysis, next a principal components analysis was done that made linear combinations of all the remaining variables.  
+
+The factor variables were turned into dummy indicator variables and then all variables were centered and scaled.
+
+```{r}
+foo <- var(sages_juiced2) %>% diag()
+foo <- foo[-1]
+
+amount_var_explained <- foo / sum(foo)
+goo <- tibble(v = amount_var_explained *100,
+              sum = cumsum(v)) %>%
+  mutate(pc = row_number())
+```
+
+There are `r length(foo)` principal components in total.
+
+
+```{r}
+#| fig-cap: "Amount of variance explained"
+
+ggplot(goo, aes(x = pc, y = sum)) +
+  geom_line() +
+  scale_x_continuous("Number of components") +
+  scale_y_continuous("Percent variance explained") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+
+The first `r n_pc_to_keep` components explain `r goo %>% filter(pc==n_pc_to_keep) %>% pull(sum) %>% round(1)` percent of the variance.
+
+

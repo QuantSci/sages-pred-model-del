@@ -8,7 +8,7 @@ sages_combined <- readRDS(file=fs::path(r_objects_folder, "020_sages_combined.rd
 
 ```{r}
 covariates_to_use <- variable_df %>%
-  filter(covariates_to_use_3) %>%
+  filter(covariates_to_use_4) %>%
   pull(covariates_all)
 
 covariates_to_use <- covariates_to_use[!covariates_to_use %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]

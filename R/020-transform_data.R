@@ -210,6 +210,7 @@ labelled::var_label(sages_mr$comorbid.stroke) <- "Stroke"
 # Comorbities, Insurance status, Anesthesia
 sages_mr <- sages_mr %>%
   mutate(vdcci3     = fct_collapse(as.character(vdcci), "cci_0" = "0", "cci_1" = "1", "cci_2_7" = c("2", "3", "4", "5", "6", "7")),
+         vdcci5     = fct_collapse(as.character(vdcci), "cci_0" = "0", "cci_1" = "1", "cci_2" = "2", "cci_3" = "3", "cci4_7" = c("4", "5", "6", "7")),
          vdvascom   = fct_recode(as.character(vdvascom), "No comorbidity" = "0", "Vascular comorbidity" = "1"),
          ins01      = fct_recode(as.character(ins01), "Insurance" = "2") %>% fct_expand("No Insurance"),
          ins02      = fct_recode(as.character(ins02), "Medicare" = "1", "No Medicare" = "2") %>% fct_relevel("Medicare", "No Medicare") ,
@@ -230,7 +231,8 @@ sages_mr <- sages_mr %>%
                                      "Any Spinal Anesthesia" = c("Spinal Anesthesia", "General and Spinal Anesthesia"))) %>%
   select(-op04a, -op04b, -op04c, -icd.mi, -icd.ctd)
 
-labelled::var_label(sages_mr$vdcci3) <- "Charlson Comorbidity Index"
+labelled::var_label(sages_mr$vdcci3) <- "Charlson Comorbidity Index (3 categories)"
+labelled::var_label(sages_mr$vdcci5) <- "Charlson Comorbidity Index (5 categories)"
 labelled::var_label(sages_mr$vdcci) <- "Charlson Comorbidity Index"
 labelled::var_label(sages_mr$vdvascom) <- "Vascular Comorbidity"
 labelled::var_label(sages_mr$ins01) <- "No Insurance"

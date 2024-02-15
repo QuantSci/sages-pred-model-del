@@ -10,6 +10,7 @@ variable_df <- tibble(covariates_all)
 # covariates_to_use_2: variable list that contains labs from more days and some variables that were considered hard
 #   for clinicians to assess
 # covariates_to_use_3: variable list similar to covariates_to_use_2 but uses continuous lab values instead of indicators
+# covariates_to_use_4: after 2024-02-06 meeting: variable list similar to covariates_to_use_3, adds apache, keeps cci as continuous, drops the comorbidity variables, drops imaging abnormality variable
 
 variable_df <- variable_df %>%
   mutate(covariates_to_use_1 = covariates_all %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m",
@@ -99,7 +100,39 @@ variable_df <- variable_df %>%
                                                      "vdp41901", "vdp42101", "vdp42303", "vdp42304", "vdp42305",               
                                                      "vdp42309", "vdp42701", "vdp42702", "vdp42901", "vdp42902",               
                                                      "vdp42903", "vdp42904", "vdp42905", "vdp42906", "vdp43101",               
-                                                     "vdp43301", "vdp44701"    )
+                                                     "vdp43301", "vdp44701"    ),
+         covariates_to_use_4 = covariates_all %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m",
+                                                     "vdage", "vdfemale", "vdnonwhite", "vdeduc_r", "vdlivesalone", 
+                                                     "vdsmokingstatus", "vdalcohol", "vdbmi3", "vdesl",
+                                                     "vdmlta_metmins", 
+                                                     "vdadlany", "vdiadlanyc", "vdgds15", 
+                                                     "vdsf12pcs", "vdsf12mcs",  
+                                                     "vdhearingimp", "vddrisk93_1", 
+                                                     "vdfriedfrail1", "vdfriedfrail2", "vdfriedfrail3", "vdfriedfrail4", "vdfriedfrail5",
+                                                     "vd3ms", "vdgcp_rta", "wtar01", "vdiqc_proxy",
+                                                     "vdcrp_preop", "vdcrp_pod2", "apoe4", 
+                                                     "ins01", "ins02", "ins03", "ins04", "ins05", "ci01", "dep01",
+                                                     "lab01a", "lab02a", "lab03a", "lab04a", "lab05a", "lab06a", "lab07a", "lab08a",
+                                                     "lab09a", "lab10a", "lab11a", "lab12a", "lab13a", "lab14a", "lab15a", 
+                                                     "lab.corrected.calcium.1", "lab.bun.cre.ratio.1", "lab.anion.gap.1",
+                                                     "lab01c", "lab02c", "lab03c", "lab04c", "lab05c", "lab06c", "lab08c", 
+                                                     "lab15c", "lab16c", "lab17c", "lab18c", 
+                                                     "lab02e", "lab03e", "lab04e", "lab05e", 
+                                                     "vdvascom", "vdcci", "vdapache", "vdsurg", "op01_3", "vdanesth_spi",
+                                                     "vdp41101", "vdp41301", "vdp41302", "vdp41303", "vdp41304",               
+                                                     "vdp41305", "vdp41311", "vdp41312", "vdp41313", "vdp41314",               
+                                                     "vdp41315", "vdp41316", "vdp41317", "vdp41318", "vdp41319",               
+                                                     "vdp41320", "vdp41321", "vdp41322", "vdp41323", "vdp41324",               
+                                                     "vdp41325", "vdp41326", "vdp41327", "vdp41328", "vdp41329",               
+                                                     "vdp41330", "vdp41331", "vdp41501", "vdp41502", "vdp41503",               
+                                                     "vdp41504", "vdp41505", "vdp41506", "vdp41507", "vdp41508",               
+                                                     "vdp41509", "vdp41510", "vdp41511", "vdp41512", "vdp41513",               
+                                                     "vdp41514", "vdp41515", "vdp41516", "vdp41721", "vdp41722",               
+                                                     "vdp41723", "vdp41724", "vdp41725", "vdp41726", "vdp41727",               
+                                                     "vdp41901", "vdp42101", "vdp42303", "vdp42304", "vdp42305",               
+                                                     "vdp42309", "vdp42701", "vdp42702", "vdp42901", "vdp42902",               
+                                                     "vdp42903", "vdp42904", "vdp42905", "vdp42906", "vdp43101",               
+                                                     "vdp43301"   )
          )
 
 

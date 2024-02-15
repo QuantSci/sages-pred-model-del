@@ -284,7 +284,7 @@ sages_mr <- sages_mr %>%
 
 
 # labelled::var_label(sages_mr$lab.corrected.calcium.1) <- "Corrected Calcium (Pre-op)"
-labelled::var_label(sages_mr$lab.bun.cre.ratio.1) <- "BUN/creatinine ratio (rPe-op)"
+labelled::var_label(sages_mr$lab.bun.cre.ratio.1) <- "BUN/creatinine ratio (Pre-op)"
 labelled::var_label(sages_mr$lab.anion.gap.1) <- "Anion Gap (Pre-op)"
 
 labelled::var_label(sages_mr$lab.wbc.1.lo) <- "WBC <= 2 (Pre-op)"

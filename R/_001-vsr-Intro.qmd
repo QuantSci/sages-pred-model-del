@@ -2,7 +2,7 @@
 
 ## Overall goal
 
-The overall goal is to build the best prediction model for delirium and cognitive decline as possible given the data we collected. This is intended for a research audience because many of the variables going into this model would be difficult for clinicians to obtain.
+The overall goal is to build the two best prediction models for delirium and cognitive decline as possible given the data we collected. This is intended for a research audience because many of the variables going into this model would be difficult for clinicians to obtain.
 
 ## Today's (2024-02-02) goal
 

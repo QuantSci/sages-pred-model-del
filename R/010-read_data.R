@@ -87,7 +87,7 @@ sages_apoe <- sages_apoe %>%
 sages_mr <- haven::read_dta(fs::path(sagesdatafolder.frozen, "SAGES-Medical-Record-Data-Analysis-File.dta"))
 attributes(sages_mr$studyid) <- NULL
 sages_mr <- sages_mr %>%
-  select("studyid", "vdcci", "vdvascom",  
+  select("studyid", "vdcci", "vdvascom", "vdapache",  
          "ins01", "ins02", "ins03", "ins04", "ins05", "op01", "ci01", "dep01", "op04a", "op04b", "op04c",
          "icd01a", "icd02a", "icd03a", "icd04a", "icd05a", "icd06a", "icd07a", "icd08a", "icd09a", "icd10a",
          "icd11a", "icd12a", "icd13a", "icd14a", "icd15a", "icd16a", "icd17a", "icd18a", "icd19a", "icd20a",
