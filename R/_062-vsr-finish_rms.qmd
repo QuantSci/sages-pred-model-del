@@ -1,20 +1,36 @@
 
 
 ```{r}
-n_pc_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_n_pc_to_keep.rds"))
+
+n_pca <- readRDS(file=fs::path(r_objects_folder, "062_n_pca.rds"))
 sages_juiced2 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced2.rds"))
+variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
+
+expert_panel_3plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "062_expert_panel_3plus_nice_names.rds"))
+expert_panel_2plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "062_expert_panel_2plus_nice_names.rds"))
+expert_panel_1plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "062_expert_panel_1plus_nice_names.rds"))
+
 
 ```
 
 ## Principal component analysis
 
-After the redundancy analysis, next a principal components analysis was done that made linear combinations of all the remaining variables.  
+After the redundancy analysis, several versions of a principal components analysis was done that made linear combinations of various groupings of the remaining variables.
 
-The factor variables were turned into dummy indicator variables and then all variables were centered and scaled.
+The first group of principal components used all 93 variables.
+The second group of principal components used 7 variables that received 3 or more votes from the expert panel.
+The second group of principal components used 14 variables that received 2 or more votes from the expert panel.
+The second group of principal components used 28 variables that received 1 or more votes from the expert panel.
+
+Prior to the PCA factor variables were turned into dummy indicator variables and then all variables were centered and scaled.
+
+### Complete variable set
 
 ```{r}
-foo <- var(sages_juiced2) %>% diag()
-foo <- foo[-1]
+foo <- sages_juiced2 %>%
+  select(starts_with("pca93")) %>%
+  var() %>%
+  diag()
 
 amount_var_explained <- foo / sum(foo)
 goo <- tibble(v = amount_var_explained *100,
@@ -22,11 +38,11 @@ goo <- tibble(v = amount_var_explained *100,
   mutate(pc = row_number())
 ```
 
-There are `r length(foo)` principal components in total.
+There are `r n_pca` variables and thus principal components in total.
 
 
 ```{r}
-#| fig-cap: "Amount of variance explained"
+#| fig-cap: "Amount of variance explained by the prinicpal components"
 
 ggplot(goo, aes(x = pc, y = sum)) +
   geom_line() +
@@ -37,6 +53,110 @@ ggplot(goo, aes(x = pc, y = sum)) +
 
 ```
 
-The first `r n_pc_to_keep` components explain `r goo %>% filter(pc==n_pc_to_keep) %>% pull(sum) %>% round(1)` percent of the variance.
+```{r}
+n_pca_to_keep <- 25
+```
+
+The first `r n_pca_to_keep` components explain `r goo %>% filter(pc==n_pca_to_keep) %>% pull(sum) %>% round(1)` percent of the variance.
+
+### Expert panel variable sets
+
+After the previous PCA showed that the first several principal components don't explain as much variance as expected, the expert panel voted on which variables to keep.  These are the results.
+
+```{r}
+variable_df %>%
+  mutate(ep_3votes = covariates_all %in% expert_panel_3plus_nice_names,
+         ep_2votes = covariates_all %in% expert_panel_2plus_nice_names,
+         ep_1votes = covariates_all %in% expert_panel_1plus_nice_names) %>%
+  filter(ep_1votes) %>%
+  select(covariates_all, variable_label, ep_3votes, ep_2votes, ep_1votes) %>%
+  arrange(desc(ep_3votes), desc(ep_2votes)) %>%
+  gt::gt() %>%
+    gt::tab_spanner(
+      label = "Expert panel",
+      columns = c(ep_3votes, ep_2votes, ep_1votes)
+    ) %>%
+    gt::cols_label(
+      covariates_all = "Variable", 
+      variable_label = "Label", 
+      ep_3votes = "Received 3+ votes", 
+      ep_2votes = "Received 2+ votes", 
+      ep_1votes = "Received 1+ votes"
+    )
+  
+
+```
 
 
+
+```{r}
+foo <- sages_juiced2 %>%
+  select(starts_with("pca7")) %>%
+  var() %>%
+  diag()
+
+amount_var_explained <- foo / sum(foo)
+goo <- tibble(v = amount_var_explained *100,
+              sum = cumsum(v)) %>%
+  mutate(pc = row_number())
+```
+
+```{r}
+#| fig-cap: "Amount of variance explained by the prinicpal components (3+ votes by expert panel)"
+
+ggplot(goo, aes(x = pc, y = sum)) +
+  geom_line() +
+  scale_x_continuous("Number of components") +
+  scale_y_continuous("Percent variance explained") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+
+```{r}
+foo <- sages_juiced2 %>%
+  select(starts_with("pca14")) %>%
+  var() %>%
+  diag()
+
+amount_var_explained <- foo / sum(foo)
+goo <- tibble(v = amount_var_explained *100,
+              sum = cumsum(v)) %>%
+  mutate(pc = row_number())
+```
+
+```{r}
+#| fig-cap: "Amount of variance explained by the prinicpal components (2+ votes by expert panel)"
+
+ggplot(goo, aes(x = pc, y = sum)) +
+  geom_line() +
+  scale_x_continuous("Number of components") +
+  scale_y_continuous("Percent variance explained") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+
+```{r}
+foo <- sages_juiced2 %>%
+  select(starts_with("pca28")) %>%
+  var() %>%
+  diag()
+
+amount_var_explained <- foo / sum(foo)
+goo <- tibble(v = amount_var_explained *100,
+              sum = cumsum(v)) %>%
+  mutate(pc = row_number())
+```
+
+```{r}
+#| fig-cap: "Amount of variance explained by the prinicpal components (1+ votes by expert panel)"
+
+ggplot(goo, aes(x = pc, y = sum)) +
+  geom_line() +
+  scale_x_continuous("Number of components") +
+  scale_y_continuous("Percent variance explained") +
+  hrbrthemes::theme_ipsum()
+
+
+```

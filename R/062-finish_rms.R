@@ -34,7 +34,11 @@ sages_test  <- rsample::testing(sages_split)
 # recipe steps
 # Create dummy variables out of the factor variables so they can be used in the PCA
 # Normalize the variables because that is better for PCA
-# Do the PCA
+# Do the PCA:
+# 1. on all the variables
+# 2. on the subset of variables that received at least 3 votes from the expert panel 
+# 3. on the subset of variables that received at least 2 votes from the expert panel 
+# 4. on the subset of variables that received at least 1 votes from the expert panel 
 
 sages_recipe <- recipes::recipe(vdgcp_slope36m ~ ., data = sages_train) %>%
   recipes::step_dummy(all_nominal(), -all_outcomes()) %>%
@@ -42,16 +46,40 @@ sages_recipe <- recipes::recipe(vdgcp_slope36m ~ ., data = sages_train) %>%
 sages_prepped <- recipes::prep(sages_recipe)
 sages_juiced <- recipes::juice(sages_prepped)
 
+# This is to make sure we get all the pca components from the first step
 n_pca <- (length(sages_juiced)-1)
-sages_recipe2 <- sages_recipe %>%
-  recipes::step_pca(all_predictors(), num_comp = n_pca)
 
+# These are the results from the expert panel
+# vdage-vdiadlanyc are 7 with 3+ votes
+expert_panel_3plus_nice_names <- c("vdage", "vdp43301", "vdp41721", "vdgcp_rta", "vdcci", "vdeduc_r", "vdiadlanyc")
+# vdfemale-vdsurg are 13 with 2+ votes
+expert_panel_2plus_nice_names <- c(expert_panel_3plus_nice_names, "vdfemale", "vdp41508", "vdsf12pcs", "vdfriedfrail5", "vdapache", "vdsurg")
+# vdnonwhite-vdhearingimp are any receiving 1+ votes
+expert_panel_1plus_nice_names <- c(expert_panel_2plus_nice_names, "vdnonwhite", "vdlivesalone", "ins03", "lab01a", "lab05a", "lab15c", "lab.bun.cre.ratio.1", 
+                        "vdp43101", "vdp41509", "vdp41722", "wtar01", "vdadlany", "vdgds15", "vdhearingimp")
+
+expert_panel_3plus <- c("vdage", "vdp43301_Yes", "vdp41721_Yes", "vdgcp_rta", "vdcci", "vdeduc_r", "vdiadlanyc_Impairment")
+expert_panel_2plus <- c(expert_panel_3plus, "vdfemale_Female", "vdp41508", "vdsf12pcs", "vdfriedfrail5_Slow_timed_walk", "vdapache", "vdsurg_Vascular", "vdsurg_Gastrointestinal")
+expert_panel_1plus <- c(expert_panel_2plus, "vdnonwhite_Nonwhite", "vdlivesalone_Alone", "ins03_No.Private.Insurance", "lab01a", "lab05a", "lab15c", "lab.bun.cre.ratio.1", 
+                        "vdp43101", "vdp41509", "vdp41722_Yes", "wtar01", "vdadlany_Impairment", "vdgds15", "vdhearingimp_Impairment")
+# Checking that the variable names are specified correctly after step_dummy turned some into dummy indicators
+# sages_juiced %>%
+#   select(all_of(expert_panel_1plus))
+
+
+sages_recipe2 <- sages_recipe %>%
+  recipes::step_pca(all_predictors(), num_comp = n_pca, prefix = "pca93_", keep_original_cols = TRUE) %>%
+  recipes::step_pca(all_predictors(), num_comp = 7, columns = expert_panel_3plus, prefix = "pca7_", keep_original_cols = TRUE) %>%
+  recipes::step_pca(all_predictors(), num_comp = 14, columns = expert_panel_2plus, prefix = "pca14_", keep_original_cols = TRUE) %>%
+  recipes::step_pca(all_predictors(), num_comp = 28, columns = expert_panel_1plus, prefix = "pca28_", keep_original_cols = TRUE)
 
 sages_prepped2 <- recipes::prep(sages_recipe2)
 sages_juiced2 <- recipes::juice(sages_prepped2)
 
-# foo <- var(sages_juiced2) %>% diag()
-# foo <- foo[-1]
+# foo <- sages_juiced2 %>%
+#   select(starts_with("pca93")) %>%
+#   var() %>%
+#   diag()
 # amount_var_explained <- foo / sum(foo)
 # cumsum(amount_var_explained)
 # goo <- tibble(v = amount_var_explained,
@@ -63,29 +91,36 @@ sages_juiced2 <- recipes::juice(sages_prepped2)
 #   scale_x_continuous("Number of components") +
 #   scale_y_continuous("Percent variance explained") +
 #   hrbrthemes::theme_ipsum()
+# 
+# 
+# foo <- sages_juiced2 %>%
+#   select(starts_with("pca7")) %>%
+#   var() %>%
+#   diag()
+# amount_var_explained <- foo / sum(foo)
+# cumsum(amount_var_explained)
 
-n_pc_to_keep <- 25
-pc_to_keep <- str_c("PC", str_pad(1:n_pc_to_keep, width = 2, pad = "0")) 
-sages_recipe3 <- sages_recipe2 %>%
-  step_select(all_outcomes(), all_of(pc_to_keep))
 
-sages_prepped3 <- recipes::prep(sages_recipe3)
-sages_juiced3 <- recipes::juice(sages_prepped3)
-
-sages_recipe4 <- sages_recipe3 %>%
-  step_ns(all_predictors(), deg_free = 3)
-
-sages_prepped4 <- recipes::prep(sages_recipe4)
-sages_juiced4 <- recipes::juice(sages_prepped4)
+# doing the splines in a different file
+# sages_recipe4 <- sages_recipe3 %>%
+#   step_ns(all_predictors(), deg_free = 3)
+# 
+# sages_prepped4 <- recipes::prep(sages_recipe4)
+# sages_juiced4 <- recipes::juice(sages_prepped4)
 
 saveRDS(sages_split,       file=fs::path(r_objects_folder, "062_sages_split.rds"))
 saveRDS(sages_train,       file=fs::path(r_objects_folder, "062_sages_train.rds"))
 saveRDS(sages_test,        file=fs::path(r_objects_folder, "062_sages_test.rds"))
-saveRDS(n_pc_to_keep,      file=fs::path(r_objects_folder, "062_n_pc_to_keep.rds"))
+# saveRDS(n_pc_to_keep,      file=fs::path(r_objects_folder, "062_n_pc_to_keep.rds"))
+saveRDS(n_pca,      file=fs::path(r_objects_folder, "062_n_pca.rds"))
 saveRDS(sages_juiced2,     file=fs::path(r_objects_folder, "062_sages_juiced2.rds"))
-saveRDS(sages_recipe3,     file=fs::path(r_objects_folder, "062_sages_recipe3.rds"))
-saveRDS(sages_juiced3,     file=fs::path(r_objects_folder, "062_sages_juiced3.rds"))
-saveRDS(sages_recipe4,     file=fs::path(r_objects_folder, "062_sages_recipe4.rds"))
-saveRDS(sages_juiced4,     file=fs::path(r_objects_folder, "062_sages_juiced4.rds"))
+saveRDS(sages_recipe2,     file=fs::path(r_objects_folder, "062_sages_recipe2.rds"))
+
+saveRDS(expert_panel_3plus,     file=fs::path(r_objects_folder, "062_expert_panel_3plus.rds"))
+saveRDS(expert_panel_2plus,     file=fs::path(r_objects_folder, "062_expert_panel_2plus.rds"))
+saveRDS(expert_panel_1plus,     file=fs::path(r_objects_folder, "062_expert_panel_1plus.rds"))
+saveRDS(expert_panel_3plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_3plus_nice_names.rds"))
+saveRDS(expert_panel_2plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_2plus_nice_names.rds"))
+saveRDS(expert_panel_1plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_1plus_nice_names.rds"))
 
 

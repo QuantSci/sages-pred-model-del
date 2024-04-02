@@ -1,10 +1,14 @@
 
 sages_combined <- readRDS(file=fs::path(r_objects_folder, "020_sages_combined.rds"))
 
+variable_df <- var_label(sages_combined) %>%
+  enframe() %>%
+  unnest(cols = c(value)) %>%
+  rename(covariates_all = name) %>%
+  rename(variable_label = value)
 
-covariates_all <- names(sages_combined)
-
-variable_df <- tibble(covariates_all)
+# covariates_all <- names(sages_combined)
+# variable_df <- tibble(covariates_all)
 
 # covariates_to_use_1: variable list similar to (but not the same as) the list used in Jones (2021)
 # covariates_to_use_2: variable list that contains labs from more days and some variables that were considered hard

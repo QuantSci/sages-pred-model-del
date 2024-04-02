@@ -18,7 +18,6 @@ keep-md: true
 
 
 ```{r}
-
 source(here::here("r", "001-libraries.r"))
 source(here::here("r", "002-folder_paths_and_options.r"))
 
@@ -33,26 +32,41 @@ source(here::here("r", "020-transform_data.r"))
 source(here::here("r", "021-create_variable_metadata.r"))
 
 source(here::here("r", "060-implement_rms.r"))
-# source(here::here("r", "065-specify_models.r"))
-# source(here::here("r", "070-fit_models.r"))
+source(here::here("r", "062-finish_rms.r"))
+source(here::here("r", "065-specify_models.r"))
+source(here::here("r", "070-fit_models.r"))
 
 ```
 
-{{< include _001-intro.qmd >}}
+{{< include _001-vsr-intro.qmd >}}
 
-{{< include _010-read_data.qmd >}}
+{{< include _010-vsr-read_data.qmd >}}
 
-{{< include _015-transform_labs.qmd >}}
+{{< include _015-vsr-transform_labs.qmd >}}
 
-{{< include _020-transform_data.qmd >}}
+{{< include _020-vsr-transform_data.qmd >}}
 
-{{< include _021-create_variable_metadata.qmd >}}
+{{< include _021-vsr-create_variable_metadata.qmd >}}
 
-{{< include _060-implement_rms.qmd >}}
+{{< include _060-vsr-implement_rms.qmd >}}
 
-<!-- {{< include _065-specify_models.qmd >}} -->
+{{< include _062-vsr-finish_rms.qmd >}}
 
-<!-- {{< include _070-fit_models.qmd >}} -->
+<!-- {{< include _001-intro.qmd >}} -->
+
+<!-- {{< include _010-read_data.qmd >}} -->
+
+<!-- {{< include _015-transform_labs.qmd >}} -->
+
+<!-- {{< include _020-transform_data.qmd >}} -->
+
+<!-- {{< include _021-create_variable_metadata.qmd >}} -->
+
+<!-- {{< include _060-implement_rms.qmd >}} -->
+
+{{< include _065-specify_models.qmd >}}
+
+{{< include _070-fit_models.qmd >}}
 
 
 

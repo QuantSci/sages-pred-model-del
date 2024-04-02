@@ -1,0 +1,103 @@
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+# Variable reduction
+
+This section details the variable reduction technique from Harrell's Regression Modeling Strategies that we used to reduce the number of variables used in the analysis.
+
+
+
+```{r}
+sages_juiced_rms <- readRDS(file=fs::path(r_objects_folder, "060_sages_juiced_rms.rds"))
+sages_reduced <- readRDS(file=fs::path(r_objects_folder, "060_sages_reduced.rds"))
+sages_combined <-   readRDS(file=fs::path(r_objects_folder, "022_sages_combined.rds"))
+variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
+
+covariates_to_use <- variable_df %>%
+  filter(covariates_to_use_4) %>%
+  pull(covariates_all)
+covariates_to_use <- covariates_to_use[!covariates_to_use %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]
+sages_combined <- sages_combined %>%
+  select(all_of(covariates_to_use))
+
+```
+
+
+```{r}
+covariates_dropped_nzv <- names(sages_combined)[!(names(sages_combined) %in% names(sages_juiced_rms))]
+covariates_not_dropped_nzv <- names(sages_combined)[(names(sages_combined) %in% names(sages_juiced_rms))]
+```
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+Of the `r length(covariates_to_use)` variables we start with, we dropped `r length(covariates_dropped_nzv)` of them for having a low amount of variability.
+
+These are the variables that were dropped:
+
+```{r}
+sages_combined %>%
+  select(all_of(covariates_dropped_nzv)) %>%
+  gtsummary::tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})"),
+    type = all_dichotomous() ~ "categorical"
+  )
+```
+
+```{r}
+covariates_sages_juiced <- names(sages_juiced_rms)
+covariates_sages_juiced <- covariates_sages_juiced[!covariates_sages_juiced %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m")]
+covariates_dropped_rms <- covariates_sages_juiced[!(covariates_sages_juiced %in% names(sages_reduced))]
+covariates_not_dropped_rms <- covariates_sages_juiced[(covariates_sages_juiced %in% names(sages_reduced))]
+```
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+ 
+Of the `r length(covariates_not_dropped_nzv)` variables retained, `r length(covariates_dropped_rms)` were dropped due to redundancy.
+
+These are the variables that were dropped:
+
+```{r}
+sages_combined %>%
+  select(all_of(covariates_dropped_rms)) %>%
+  gtsummary::tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})"),
+    ,
+    type = all_dichotomous() ~ "categorical"
+  )
+```
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+### List of predictive features after dropping for missingness, low variance, and redundancy:
+
+There are `r length(covariates_not_dropped_rms)` variables retained after the redundancy analysis.
+
+```{r}
+sages_combined %>%
+  select(any_of(covariates_not_dropped_rms)) %>% 
+  labelled::var_label() %>%
+  as_tibble() %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "label") %>%
+  gt::gt()
+```
+
+
+

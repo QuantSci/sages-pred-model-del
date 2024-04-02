@@ -4,6 +4,10 @@
 
 The overall goal is to build the two best prediction models for delirium and cognitive decline as possible given the data we collected. This is intended for a research audience because many of the variables going into this model would be difficult for clinicians to obtain.
 
+## Today's (2024-04-05) goal
+
+Review the variables the expert panel voted to keep and the resulting principal compenent analysis.
+
 ## Today's (2024-02-02) goal
 
 Review the variables that made it through our selection process for inclusion into the model.
