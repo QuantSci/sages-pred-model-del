@@ -123,4 +123,4 @@ saveRDS(expert_panel_3plus_nice_names,     file=fs::path(r_objects_folder, "062_
 saveRDS(expert_panel_2plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_2plus_nice_names.rds"))
 saveRDS(expert_panel_1plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_1plus_nice_names.rds"))
 
-
+readr::write_csv(sages_juiced2, here::here("data", "062_sages_juiced2.csv"))
