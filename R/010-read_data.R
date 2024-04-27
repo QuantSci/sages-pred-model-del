@@ -34,6 +34,12 @@ sages_slope_48M <- sages_slope_48M %>%
   select(-timefr)
 
 
+# 72M slope
+sages_slope_72M <- haven::read_dta(here::here("data", "vdgcp_slope72m.dta"))
+sages_slope_72M <- sages_slope_72M %>%
+  rename(vdgcp_slope72m = vdgcp_slope72) %>%
+  select(studyid, vdgcp_slope72m)
+
 # # These are the slopes used by Devore.  They are calculated through 36M
 # sages_slope_36M <- read.csv("~/documents/dwork/sages/projects/p1a1/posted/data/derived/slopes.csv", stringsAsFactors=FALSE)
 # sages_slope_36M <- sages_slope_36M %>%
@@ -115,6 +121,7 @@ sages_mr              <- dplyr::semi_join(sages_mr              , n560, by = "st
 sages_proxy_interview <- dplyr::semi_join(sages_proxy_interview , n560, by = "studyid")
 sages_slope_36M       <- dplyr::semi_join(sages_slope_36M       , n560, by = "studyid")
 sages_slope_48M       <- dplyr::semi_join(sages_slope_48M       , n560, by = "studyid")
+sages_slope_72M       <- dplyr::semi_join(sages_slope_72M       , n560, by = "studyid")
 sages_subject         <- dplyr::semi_join(sages_subject         , n560, by = "studyid")
 sages_rnj             <- dplyr::semi_join(sages_rnj             , n560, by = "studyid")
 
@@ -125,6 +132,7 @@ saveRDS(sages_mr,              file=fs::path(r_objects_folder, "010_sages_mr.rds
 saveRDS(sages_proxy_interview, file=fs::path(r_objects_folder, "010_sages_proxy_iterview.rds"))
 saveRDS(sages_slope_36M,       file=fs::path(r_objects_folder, "010_sages_slopes_36M.rds"))
 saveRDS(sages_slope_48M,       file=fs::path(r_objects_folder, "010_sages_slopes_48M.rds"))
+saveRDS(sages_slope_72M,       file=fs::path(r_objects_folder, "010_sages_slopes_72M.rds"))
 saveRDS(sages_subject,         file=fs::path(r_objects_folder, "010_sages_subject.rds"))
 saveRDS(sages_rnj,         file=fs::path(r_objects_folder, "010_sages_rnj.rds"))
 

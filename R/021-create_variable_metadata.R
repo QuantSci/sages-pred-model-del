@@ -1,5 +1,6 @@
 
 sages_combined <- readRDS(file=fs::path(r_objects_folder, "020_sages_combined.rds"))
+outcome_variables <- readRDS(file=fs::path(r_objects_folder, "020_outcome_variables.rds"))
 
 variable_df <- var_label(sages_combined) %>%
   enframe() %>%
@@ -17,7 +18,7 @@ variable_df <- var_label(sages_combined) %>%
 # covariates_to_use_4: after 2024-02-06 meeting: variable list similar to covariates_to_use_3, adds apache, keeps cci as continuous, drops the comorbidity variables, drops imaging abnormality variable
 
 variable_df <- variable_df %>%
-  mutate(covariates_to_use_1 = covariates_all %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m",
+  mutate(covariates_to_use_1 = covariates_all %in% c(outcome_variables,
                                                      "vdage", "vdfemale", "vdnonwhite", "vdesl", "vd3ms", "vdeduc_r",
                                                      "vdbmi3", "vdlivesalone", "vdsmokingstatus",  "vdalcohol",
                                                      "vdadlany", "vdiadlany", "vdiadlanyc", "vdiqc_proxy", "vdgds15",
@@ -32,7 +33,7 @@ variable_df <- variable_df %>%
                                                      "lab.wbc.1.lo", "lab.wbc.1.hi", "lab.hct.1.lo", "lab.hct.1.hi", "lab.cre.1.hi", 
                                                      "lab.sod.1.lo", "lab.sod.1.hi", "lab.pot.1.lo", "lab.pot.1.hi", "lab.alt.1.hi", 
                                                      "lab.ast.1.hi", "lab.bil.1.hi", "lab.bun.cre.1.hi", "lab.o2.1.lo"),
-         covariates_to_use_2 = covariates_all %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m",
+         covariates_to_use_2 = covariates_all %in% c(outcome_variables,
                                                      "vdage", "vdfemale", "vdnonwhite", "vdeduc_r", "vdlivesalone", 
                                                      "vdsmokingstatus", "vdalcohol", "vdbmi3", "vdesl",
                                                      "vdmlta_metmins", 
@@ -70,7 +71,7 @@ variable_df <- variable_df %>%
                                                      "vdp42309", "vdp42701", "vdp42702", "vdp42901", "vdp42902",               
                                                      "vdp42903", "vdp42904", "vdp42905", "vdp42906", "vdp43101",               
                                                      "vdp43301", "vdp44701"    ),
-         covariates_to_use_3 = covariates_all %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m",
+         covariates_to_use_3 = covariates_all %in% c(outcome_variables,
                                                      "vdage", "vdfemale", "vdnonwhite", "vdeduc_r", "vdlivesalone", 
                                                      "vdsmokingstatus", "vdalcohol", "vdbmi3", "vdesl",
                                                      "vdmlta_metmins", 
@@ -105,7 +106,7 @@ variable_df <- variable_df %>%
                                                      "vdp42309", "vdp42701", "vdp42702", "vdp42901", "vdp42902",               
                                                      "vdp42903", "vdp42904", "vdp42905", "vdp42906", "vdp43101",               
                                                      "vdp43301", "vdp44701"    ),
-         covariates_to_use_4 = covariates_all %in% c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m",
+         covariates_to_use_4 = covariates_all %in% c(outcome_variables,
                                                      "vdage", "vdfemale", "vdnonwhite", "vdeduc_r", "vdlivesalone", 
                                                      "vdsmokingstatus", "vdalcohol", "vdbmi3", "vdesl",
                                                      "vdmlta_metmins", 
@@ -137,7 +138,7 @@ variable_df <- variable_df %>%
                                                      "vdp42309", "vdp42701", "vdp42702", "vdp42901", "vdp42902",               
                                                      "vdp42903", "vdp42904", "vdp42905", "vdp42906", "vdp43101",               
                                                      "vdp43301"   )
-         )
+  )
 
 
 

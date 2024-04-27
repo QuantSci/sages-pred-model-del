@@ -1,12 +1,9 @@
 rm(list = setdiff(ls(), lsf.str()))
 source(here::here("R", "002-folder_paths_and_options.R"))
 
-sages_reduced <- readRDS(file=fs::path(r_objects_folder, "060_sages_reduced.rds"))
-sages_recipe <- readRDS(file=fs::path(r_objects_folder, "060_sages_recipe.rds"))
+sages_reduced <- readRDS(file=fs::path(r_objects_folder, "080_sages_reduced.rds"))
+sages_recipe <- readRDS(file=fs::path(r_objects_folder, "080_sages_recipe.rds"))
 
-
-sages_reduced <- sages_reduced %>%
-  filter(!is.na(vdgcp_slope72m))
 
 
 # str(sages_train)
@@ -14,19 +11,19 @@ sages_reduced <- sages_reduced %>%
 as.double.factor <- function(x) {
   as.numeric(levels(x))[x]
 }
-# sages_reduced <- sages_reduced %>%
-#   mutate(
-#     # vdsf12pf = as.double.factor(vdsf12pf),
-#     # vdsf12rp = as.double.factor(vdsf12rp),
-#     # vdsf12bp = as.double.factor(vdsf12bp),
-#     # vdsf12gh = as.double.factor(vdsf12gh),
-#     # vdsf12vt = as.double.factor(vdsf12vt),
-#     # vdsf12sf = as.double.factor(vdsf12sf),
-#     # vdsf12re = as.double.factor(vdsf12re),
-#     # vdsf12mh = as.double.factor(vdsf12mh),
-#     vdp41515 = fct_collapse(vdp41515, "2" = "2_3"),
-#     vdp41515 = as.double.factor(vdp41515)
-#   )
+sages_reduced <- sages_reduced %>%
+  mutate(
+    # vdsf12pf = as.double.factor(vdsf12pf),
+    # vdsf12rp = as.double.factor(vdsf12rp),
+    # vdsf12bp = as.double.factor(vdsf12bp),
+    # vdsf12gh = as.double.factor(vdsf12gh),
+    # vdsf12vt = as.double.factor(vdsf12vt),
+    # vdsf12sf = as.double.factor(vdsf12sf),
+    # vdsf12re = as.double.factor(vdsf12re),
+    # vdsf12mh = as.double.factor(vdsf12mh),
+    vdp41515 = fct_collapse(vdp41515, "2" = "2_3"),
+    vdp41515 = as.double.factor(vdp41515)
+  )
 
 set.seed(222)
 # Put 80% of the data into the training set 
@@ -47,7 +44,7 @@ sages_test  <- rsample::testing(sages_split)
 # 3. on the subset of variables that received at least 2 votes from the expert panel 
 # 4. on the subset of variables that received at least 1 votes from the expert panel 
 
-sages_recipe <- recipes::recipe(vdgcp_slope72m ~ ., data = sages_train) %>%
+sages_recipe <- recipes::recipe(vdsagesdeliriumever ~ ., data = sages_train) %>%
   recipes::step_dummy(all_nominal(), -all_outcomes()) %>%
   recipes::step_normalize(recipes::all_numeric(), -all_outcomes()) 
 sages_prepped <- recipes::prep(sages_recipe)
@@ -125,20 +122,20 @@ sages_juiced2 <- recipes::juice(sages_prepped2)
 # sages_juiced4 <- recipes::juice(sages_prepped4)
 
 N_pca_to_keep <- 15
-saveRDS(N_pca_to_keep,       file=fs::path(r_objects_folder, "062_N_pca_to_keep.rds"))
+saveRDS(N_pca_to_keep,       file=fs::path(r_objects_folder, "082_N_pca_to_keep.rds"))
 
-saveRDS(sages_split,       file=fs::path(r_objects_folder, "062_sages_split.rds"))
-saveRDS(sages_train,       file=fs::path(r_objects_folder, "062_sages_train.rds"))
-saveRDS(sages_test,        file=fs::path(r_objects_folder, "062_sages_test.rds"))
-saveRDS(n_pca,             file=fs::path(r_objects_folder, "062_n_pca.rds"))
-saveRDS(sages_juiced2,     file=fs::path(r_objects_folder, "062_sages_juiced2.rds"))
-saveRDS(sages_recipe2,     file=fs::path(r_objects_folder, "062_sages_recipe2.rds"))
+saveRDS(sages_split,       file=fs::path(r_objects_folder, "082_sages_split.rds"))
+saveRDS(sages_train,       file=fs::path(r_objects_folder, "082_sages_train.rds"))
+saveRDS(sages_test,        file=fs::path(r_objects_folder, "082_sages_test.rds"))
+saveRDS(n_pca,             file=fs::path(r_objects_folder, "082_n_pca.rds"))
+saveRDS(sages_juiced2,     file=fs::path(r_objects_folder, "082_sages_juiced2.rds"))
+saveRDS(sages_recipe2,     file=fs::path(r_objects_folder, "082_sages_recipe2.rds"))
 
-saveRDS(expert_panel_3plus,     file=fs::path(r_objects_folder, "062_expert_panel_3plus.rds"))
-saveRDS(expert_panel_2plus,     file=fs::path(r_objects_folder, "062_expert_panel_2plus.rds"))
-saveRDS(expert_panel_1plus,     file=fs::path(r_objects_folder, "062_expert_panel_1plus.rds"))
-saveRDS(expert_panel_3plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_3plus_nice_names.rds"))
-saveRDS(expert_panel_2plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_2plus_nice_names.rds"))
-saveRDS(expert_panel_1plus_nice_names,     file=fs::path(r_objects_folder, "062_expert_panel_1plus_nice_names.rds"))
+saveRDS(expert_panel_3plus,     file=fs::path(r_objects_folder, "082_expert_panel_3plus.rds"))
+saveRDS(expert_panel_2plus,     file=fs::path(r_objects_folder, "082_expert_panel_2plus.rds"))
+saveRDS(expert_panel_1plus,     file=fs::path(r_objects_folder, "082_expert_panel_1plus.rds"))
+saveRDS(expert_panel_3plus_nice_names,     file=fs::path(r_objects_folder, "082_expert_panel_3plus_nice_names.rds"))
+saveRDS(expert_panel_2plus_nice_names,     file=fs::path(r_objects_folder, "082_expert_panel_2plus_nice_names.rds"))
+saveRDS(expert_panel_1plus_nice_names,     file=fs::path(r_objects_folder, "082_expert_panel_1plus_nice_names.rds"))
 
-readr::write_csv(sages_juiced2, here::here("data", "062_sages_juiced2.csv"))
+readr::write_csv(sages_juiced2, here::here("data", "082_sages_juiced2.csv"))

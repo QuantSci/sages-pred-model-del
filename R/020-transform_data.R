@@ -6,9 +6,14 @@ sages_del_assessment <-  readRDS(file=fs::path(r_objects_folder, "010_sages_del_
 sages_proxy_interview <- readRDS(file=fs::path(r_objects_folder, "010_sages_proxy_iterview.rds"))
 sages_slopes_36M <-      readRDS(file=fs::path(r_objects_folder, "010_sages_slopes_36M.rds"))
 sages_slopes_48M <-      readRDS(file=fs::path(r_objects_folder, "010_sages_slopes_48M.rds"))
+sages_slopes_72M <-      readRDS(file=fs::path(r_objects_folder, "010_sages_slopes_72M.rds"))
 sages_subject <-         readRDS(file=fs::path(r_objects_folder, "010_sages_subject.rds"))
 sages_rnj <-             readRDS(file=fs::path(r_objects_folder, "010_sages_rnj.rds"))
 sages_mr <-              readRDS(file=fs::path(r_objects_folder, "015_sages_mr.rds"))
+
+
+potential_outcome_variables <- c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m", "vdgcp_slope72m")
+outcome_variables <- c("vdsagesdeliriumever", "vdgcp_slope36m", "vdgcp_slope48m", "vdgcp_slope72m")
 
 # ### Recoding medical record data
 # ## Lab values
@@ -309,6 +314,7 @@ labelled::var_label(sages_del_assessment$vdsagesdeliriumever) <- "SAGES Delirium
 # labeling slopes
 labelled::var_label(sages_slopes_36M$vdgcp_slope36m) <- "Estimated instantaneous slope, 36 months"
 labelled::var_label(sages_slopes_48M$vdgcp_slope48m) <- "Estimated slope, 2-48 months"
+labelled::var_label(sages_slopes_72M$vdgcp_slope72m) <- "72 month slope"
 # labeling proxy interview
 labelled::var_label(sages_proxy_interview$vdiqc_proxy) <- "IQCODE, Proxy Report"
 
@@ -423,6 +429,7 @@ sages_combined <- sages_subject %>%
   left_join(sages_proxy_interview, by = "studyid") %>%
   left_join(sages_slopes_36M, by = "studyid") %>%
   left_join(sages_slopes_48M, by = "studyid") %>%
+  left_join(sages_slopes_72M, by = "studyid") %>%
   left_join(sages_mr, by = "studyid") %>%
   left_join(sages_rnj, by = "studyid") %>%
   filter(dispo_ccbl!=2 | is.na(dispo_ccbl)) %>%
@@ -478,18 +485,29 @@ if (identical(covariates_excessive_missing, character(0)) ) {
   covariates_excessive_missing <- "none"
 }
 
+
 # Imputing missing data with MICE
 sages_combined_pre_imp <- sages_combined
 sages_combined_temp <- sages_combined %>%
-  select(-studyid, -vdsagesdeliriumever, -vdgcp_slope36m, -vdgcp_slope48m)
+  select(-studyid, -any_of(potential_outcome_variables))
 # mice::md.pattern(sages_combined_temp)
 set.seed(1111)
 sages_combined_imp <- mice::mice(sages_combined_temp, m=1, method = "pmm")
 foo <- complete(sages_combined_imp, "long", include = FALSE) %>%
   as_tibble() 
 
+mice_did_not_impute_these_variables <- foo %>%
+  summarize_all(my_missing_fxn) %>%
+  pivot_longer(everything(), names_to = "covariate", values_to = "n_missing") %>%
+  filter(n_missing > 0) %>%
+  pull(covariate)
+
+foo <- foo %>%
+  select(-all_of(mice_did_not_impute_these_variables))
+
+
 sages_combined <- sages_combined %>%
-  select(studyid, vdsagesdeliriumever, vdgcp_slope36m, vdgcp_slope48m) %>%
+  select(studyid, any_of(potential_outcome_variables)) %>%
   bind_cols(foo) %>%
   select(-.imp, -.id)
 
@@ -514,6 +532,8 @@ sages_combined_labels <- labelled::var_label(sages_combined)
 #   
 # }
 # labelled::var_label(foo) <- sages_combined_labels_filtered
+saveRDS(potential_outcome_variables,   file=fs::path(r_objects_folder, "020_potential_outcome_variables.rds"))
+saveRDS(outcome_variables,   file=fs::path(r_objects_folder, "020_outcome_variables.rds"))
 saveRDS(sages_combined_labels,   file=fs::path(r_objects_folder, "020_sages_combined_labels.rds"))
 saveRDS(sages_combined,   file=fs::path(r_objects_folder, "020_sages_combined.rds"))
 saveRDS(sages_combined_pre_imp,   file=fs::path(r_objects_folder, "020_sages_combined_pre_imp.rds"))

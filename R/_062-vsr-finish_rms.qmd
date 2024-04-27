@@ -3,6 +3,8 @@
 ```{r}
 
 n_pca <- readRDS(file=fs::path(r_objects_folder, "062_n_pca.rds"))
+N_pca_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_N_pca_to_keep.rds"))
+
 sages_juiced2 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced2.rds"))
 variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
 
@@ -52,12 +54,9 @@ ggplot(goo, aes(x = pc, y = sum)) +
 
 
 ```
+`
 
-```{r}
-n_pca_to_keep <- 25
-```
-
-The first `r n_pca_to_keep` components explain `r goo %>% filter(pc==n_pca_to_keep) %>% pull(sum) %>% round(1)` percent of the variance.
+The first `r N_pca_to_keep` components explain `r goo %>% filter(pc==N_pca_to_keep) %>% pull(sum) %>% round(1)` percent of the variance.
 
 ### Expert panel variable sets
 
@@ -139,7 +138,7 @@ ggplot(goo, aes(x = pc, y = sum)) +
 
 ```{r}
 foo <- sages_juiced2 %>%
-  select(starts_with("pca28")) %>%
+  select(starts_with("pca32")) %>%
   var() %>%
   diag()
 

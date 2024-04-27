@@ -1,23 +1,8 @@
 
 
-# Data processing steps
+# Modeling
 
-1. Missing values were imputed with k nearest neighbors
-2. Categorical variables were turned into dummy variables
-3. All predictors were normalized
-4. Principal components were calculated, and those explaining 85% of the variance were retained.
+The models fit are:
 
-Insert the recipe
-
-This is how many components were retained: ____
-
-Add a plot or table of the components.
-
-The models run:
-1. Linear regression
-2. Elastic net
-3. Random forest
-4. Gradient boosted models
-
-
+-  Elastic net
 
