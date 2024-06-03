@@ -5,15 +5,15 @@
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-# Variable reduction
+# Variable reduction (delirium prediction)
 
 This section details the variable reduction technique from Harrell's Regression Modeling Strategies that we used to reduce the number of variables used in the analysis.
 
 
 
 ```{r}
-sages_juiced_rms <- readRDS(file=fs::path(r_objects_folder, "060_sages_juiced_rms.rds"))
-sages_reduced <- readRDS(file=fs::path(r_objects_folder, "060_sages_reduced.rds"))
+sages_juiced_rms <- readRDS(file=fs::path(r_objects_folder, "0680_sages_juiced_rms.rds"))
+sages_reduced <- readRDS(file=fs::path(r_objects_folder, "080_sages_reduced.rds"))
 sages_combined <-   readRDS(file=fs::path(r_objects_folder, "022_sages_combined.rds"))
 variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
 

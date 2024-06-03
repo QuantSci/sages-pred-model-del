@@ -2,17 +2,17 @@
 
 ```{r}
 
-N_pca_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_N_pca_to_keep.rds"))
+N_pca_to_keep <- readRDS(file=fs::path(r_objects_folder, "082_N_pca_to_keep.rds"))
 
-sages_juiced93 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced93.rds"))
-sages_juiced7 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced7.rds"))
-sages_juiced14 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced14.rds"))
-sages_juiced32 <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced32.rds"))
+sages_juiced93 <- readRDS(file=fs::path(r_objects_folder, "082_sages_juiced93.rds"))
+sages_juiced7 <- readRDS(file=fs::path(r_objects_folder, "082_sages_juiced7.rds"))
+sages_juiced14 <- readRDS(file=fs::path(r_objects_folder, "082_sages_juiced14.rds"))
+sages_juiced32 <- readRDS(file=fs::path(r_objects_folder, "082_sages_juiced32.rds"))
 variable_df <- readRDS(file=fs::path(r_objects_folder, "021_variable_df.rds"))
 
-expert_panel_3plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "062_expert_panel_3plus_nice_names.rds"))
-expert_panel_2plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "062_expert_panel_2plus_nice_names.rds"))
-expert_panel_1plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "062_expert_panel_1plus_nice_names.rds"))
+expert_panel_3plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "082_expert_panel_3plus_nice_names.rds"))
+expert_panel_2plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "082_expert_panel_2plus_nice_names.rds"))
+expert_panel_1plus_nice_names <- readRDS(file=fs::path(r_objects_folder, "082_expert_panel_1plus_nice_names.rds"))
 
 n_pca <- sages_juiced93 %>%
   select(starts_with("pca93")) %>%
@@ -20,7 +20,7 @@ n_pca <- sages_juiced93 %>%
   length()
 ```
 
-## Principal component analysis
+## Principal component analysis - delirium
 
 After the redundancy analysis, several versions of a principal components analysis was done that made linear combinations of various groupings of the remaining variables.
 

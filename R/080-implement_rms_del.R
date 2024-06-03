@@ -16,17 +16,6 @@ sages_combined <- sages_combined %>%
 # glimpse(sages_combined)
 
 
-# Ch 6 - Set up the model
-# set.seed(222)
-# # Put 80% of the data into the training set 
-# sages_split <- rsample::initial_split(sages_combined, prop = .8)
-# 
-# # Create data frames for the two sets:
-# sages_train_pre_rms <- rsample::training(sages_split)
-# sages_test_pre_rms  <- rsample::testing(sages_split)
-
-
-
 # Ch 8 - Create the recipe
 # Start the recipe to do the RMS redundancy analysis
 # Remove variables with (near)zero variance, otherwise the redundancy analysis won't work
@@ -47,11 +36,12 @@ sages_formula <- paste(" ~ ", b, sepby = "") %>% as.formula()
 # Do the redundancy analysis
 foo <- Hmisc::redun(sages_formula, data = sages_juiced_rms, r2=.85)
 
+variables_to_keep <- foo$In
 
 # Starting a new recipe by keeping only those variables found in the redundancy analysis
 sages_recipe <- recipes::recipe(vdsagesdeliriumever ~ ., data = sages_combined) %>%
   # recipes::update_role(studyid, new_role = "id") %>%
-  recipes::step_select(has_role("id"), all_outcomes(), all_of(foo$In)) 
+  recipes::step_select(has_role("id"), all_outcomes(), all_of(variables_to_keep))
 # Creating a new data set based on the reduced variable list, and then recreating the training/testing split
 sages_prepped <- recipes::prep(sages_recipe)
 sages_reduced <- recipes::bake(sages_prepped, new_data = sages_combined)
@@ -61,9 +51,9 @@ sages_reduced <- recipes::bake(sages_prepped, new_data = sages_combined)
 
 
 ### Save the R objects
-saveRDS(sages_juiced_rms,        file=fs::path(r_objects_folder, "080_sages_juiced_rms.rds"))
+# saveRDS(sages_juiced_rms,        file=fs::path(r_objects_folder, "080_sages_juiced_rms.rds"))
 saveRDS(sages_reduced,           file=fs::path(r_objects_folder, "080_sages_reduced.rds"))
-saveRDS(sages_recipe,            file=fs::path(r_objects_folder, "080_sages_recipe.rds"))
-
+# saveRDS(sages_recipe,            file=fs::path(r_objects_folder, "080_sages_recipe.rds"))
+saveRDS(variables_to_keep,            file=fs::path(r_objects_folder, "080_variables_to_keep.rds"))
 
 

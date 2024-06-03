@@ -1,24 +1,17 @@
 rm(list = setdiff(ls(), lsf.str()))
 source(here::here("R", "002-folder_paths_and_options.R"))
 
-sages_recipe <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe2.rds"))
-sages_juiced <- readRDS(file=fs::path(r_objects_folder, "062_sages_juiced2.rds"))
-N_pca_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_N_pca_to_keep.rds"))
+sages_recipe_93  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe93.rds"))
+sages_recipe_7   <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe7.rds"))
+sages_recipe_14  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe14.rds"))
+sages_recipe_32  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe32.rds"))
 
+sages_recipe_93_rcs <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe93_rcs.rds"))
+sages_recipe_7_rcs  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe7_rcs.rds"))
+sages_recipe_14_rcs <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe14_rcs.rds"))
+sages_recipe_32_rcs <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe32_rcs.rds"))
 
-pca93_to_keep <- str_c("pca93_", str_pad(1:N_pca_to_keep, pad = "0", width = 2))
-pca7_to_keep <- str_c("pca7_", 1:7)
-pca14_to_keep <- str_c("pca14_", str_pad(1:14, pad = "0", width = 2))
-pca32_to_keep <- str_c("pca32_", str_pad(1:N_pca_to_keep, pad = "0", width = 2))
-
-sages_recipe_93 <- sages_recipe %>%
-  step_select(vdgcp_slope72m, all_of(pca93_to_keep))
-sages_recipe_7 <- sages_recipe %>%
-  step_select(vdgcp_slope72m, all_of(pca7_to_keep))
-sages_recipe_14 <- sages_recipe %>%
-  step_select(vdgcp_slope72m, all_of(pca14_to_keep))
-sages_recipe_32 <- sages_recipe %>%
-  step_select(vdgcp_slope72m, all_of(pca32_to_keep))
+# N_pca_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_N_pca_to_keep.rds"))
 
 
 
@@ -53,6 +46,22 @@ glmnet_wf_14 <- workflows::workflow() %>%
 glmnet_wf_32 <- workflows::workflow() %>%
   workflows::add_model(glmnet_mod) %>%
   workflows::add_recipe(sages_recipe_32)
+
+glmnet_wf_93_rcs <- workflows::workflow() %>%
+  workflows::add_model(glmnet_mod) %>%
+  workflows::add_recipe(sages_recipe_93_rcs)
+
+glmnet_wf_7_rcs <- workflows::workflow() %>%
+  workflows::add_model(glmnet_mod) %>%
+  workflows::add_recipe(sages_recipe_7_rcs)
+
+glmnet_wf_14_rcs <- workflows::workflow() %>%
+  workflows::add_model(glmnet_mod) %>%
+  workflows::add_recipe(sages_recipe_14_rcs)
+
+glmnet_wf_32_rcs <- workflows::workflow() %>%
+  workflows::add_model(glmnet_mod) %>%
+  workflows::add_recipe(sages_recipe_32_rcs)
 
 # Random forest
 rf_mod <- parsnip::rand_forest(trees = tune(), min_n = tune()) %>%
@@ -96,10 +105,7 @@ lgbm_wf_32 <- workflows::workflow() %>%
   add_model(lgbm_mod) %>%
   workflows::add_recipe(sages_recipe_32)
 
-saveRDS(sages_recipe_93,     file=fs::path(r_objects_folder, "065_sages_recipe_93.rds"))
-saveRDS(sages_recipe_7,      file=fs::path(r_objects_folder, "065_sages_recipe_7.rds"))
-saveRDS(sages_recipe_14,     file=fs::path(r_objects_folder, "065_sages_recipe_14.rds"))
-saveRDS(sages_recipe_32,     file=fs::path(r_objects_folder, "065_sages_recipe_32.rds"))
+
 # saveRDS(glm_wf,            file=fs::path(r_objects_folder, "065_glm_wf.rds"))
 saveRDS(glmnet_wf_93,         file=fs::path(r_objects_folder, "065_glmnet_wf_93.rds"))
 saveRDS(rf_wf_93,             file=fs::path(r_objects_folder, "065_rf_wf_93.rds"))
@@ -113,4 +119,12 @@ saveRDS(lgbm_wf_14,           file=fs::path(r_objects_folder, "065_lgbm_wf_14.rd
 saveRDS(glmnet_wf_32,         file=fs::path(r_objects_folder, "065_glmnet_wf_32.rds"))
 saveRDS(rf_wf_32,             file=fs::path(r_objects_folder, "065_rf_wf_32.rds"))
 saveRDS(lgbm_wf_32,           file=fs::path(r_objects_folder, "065_lgbm_wf_32.rds"))
+
+saveRDS(glmnet_wf_93_rcs,         file=fs::path(r_objects_folder, "065_glmnet_wf_93_rcs.rds"))
+saveRDS(glmnet_wf_7_rcs,         file=fs::path(r_objects_folder, "065_glmnet_wf_7_rcs.rds"))
+saveRDS(glmnet_wf_14_rcs,         file=fs::path(r_objects_folder, "065_glmnet_wf_14_rcs.rds"))
+saveRDS(glmnet_wf_32_rcs,         file=fs::path(r_objects_folder, "065_glmnet_wf_32_rcs.rds"))
+
+
+
 

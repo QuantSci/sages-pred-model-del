@@ -1,0 +1,10 @@
+
+
+
+# Modeling (predicting delirium)
+
+The models fit are:
+
+-  Elastic net
+
+

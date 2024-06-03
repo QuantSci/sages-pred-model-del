@@ -1,26 +1,27 @@
 ```{r}
-N_pca_to_keep <- readRDS(file=fs::path(r_objects_folder, "062_N_pca_to_keep.rds"))
-glmnet_res_93 <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_93.rds"))
-glmnet_final_93  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_93.rds"))
-glmnet_res_7 <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_7.rds"))
-glmnet_final_7  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_7.rds"))
-glmnet_res_14 <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_14.rds"))
-glmnet_final_14  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_14.rds"))
-glmnet_res_32 <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_32.rds"))
-glmnet_final_32  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_32.rds"))
+N_pca_to_keep    <- readRDS(file=fs::path(r_objects_folder, "082_N_pca_to_keep.rds"))
+glmnet_res_93    <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_res_93.rds"))
+glmnet_final_93  <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_93.rds"))
+glmnet_res_7     <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_res_7.rds"))
+glmnet_final_7   <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_7.rds"))
+glmnet_res_14    <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_res_14.rds"))
+glmnet_final_14  <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_14.rds"))
+glmnet_res_32    <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_res_32.rds"))
+glmnet_final_32  <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_32.rds"))
 
-glmnet_final_93_rcs  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_93_rcs.rds"))
-glmnet_final_7_rcs   <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_7_rcs.rds"))
-glmnet_final_14_rcs  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_14_rcs.rds"))
-glmnet_final_32_rcs  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_32_rcs.rds"))
+glmnet_final_93_rcs  <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_93_rcs.rds"))
+glmnet_final_7_rcs   <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_7_rcs.rds"))
+glmnet_final_14_rcs  <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_14_rcs.rds"))
+glmnet_final_32_rcs  <- readRDS(file=fs::path(r_objects_folder, "090_glmnet_final_32_rcs.rds"))
 
-rf_final_93  <- readRDS(file=fs::path(r_objects_folder, "070_rf_final_93.rds"))
-rf_final_7   <- readRDS(file=fs::path(r_objects_folder, "070_rf_final_7.rds"))
-rf_final_14  <- readRDS(file=fs::path(r_objects_folder, "070_rf_final_14.rds"))
-rf_final_32  <- readRDS(file=fs::path(r_objects_folder, "070_rf_final_32.rds"))
+rf_final_93  <- readRDS(file=fs::path(r_objects_folder, "090_rf_final_93.rds"))
+rf_final_7   <- readRDS(file=fs::path(r_objects_folder, "090_rf_final_7.rds"))
+rf_final_14  <- readRDS(file=fs::path(r_objects_folder, "090_rf_final_14.rds"))
+rf_final_32  <- readRDS(file=fs::path(r_objects_folder, "090_rf_final_32.rds"))
 ```
 
-# Cognitive slope - model fit
+
+# Delirium prediction - model fit
 
 The elastic net models were fit on four variable sets across two modeling approaches:
 
@@ -52,12 +53,11 @@ The random forest models were fit on four variable sets:
 
     -   The first `r N_pca_to_keep` PCA components from the 32 variables that had one or more votes from the expert panel
 
-
 **Model tuning**
 
 The training data was into 10 cross-validation sets.
 
-The models were tuned to minimize the RMSE.
+The models were tuned to maximize the kappa statistic.
 
 The elastic net models were tuned using 25 sets of possible values.
 
@@ -71,11 +71,12 @@ These are the hyperparameters that were tuned:
 
 -   Random forest: number of trees and minimum sample size per node 
 
+
 ## GLMNET
 
 ### Original PCA components
 
-<!-- These are the hyperparameters that have the best RMSE for the elastic net model: -->
+<!-- These are the hyperparameters that have the best kappa statistics for the elastic net model: -->
 
 <!-- Model using the first `r N_pca_to_keep` of 93 PCA components. -->
 
@@ -83,29 +84,31 @@ These are the hyperparameters that were tuned:
 <!-- # collect_metrics(glm_res) -->
 <!-- # collect_metrics(glmnet_res) -->
 <!-- autoplot(glmnet_res_93) -->
-<!-- show_best(glmnet_res_93, metric = "rmse") -->
+<!-- show_best(glmnet_res_93, metric = "kap") -->
 <!-- ``` -->
 
 <!-- Model using the 7 PCA components from variables that had three or more votes from the expert panel. -->
 
 <!-- ```{r} -->
 <!-- autoplot(glmnet_res_7) -->
-<!-- show_best(glmnet_res_7, metric = "rmse") -->
+<!-- show_best(glmnet_res_7, metric = "kap") -->
 <!-- ``` -->
 
 <!-- Model using the 14 PCA components from variables that had two or more votes from the expert panel. -->
 
 <!-- ```{r} -->
 <!-- autoplot(glmnet_res_14) -->
-<!-- show_best(glmnet_res_14, metric = "rmse") -->
+<!-- show_best(glmnet_res_14, metric = "kap") -->
 <!-- ``` -->
 
 <!-- Model using the first `r N_pca_to_keep` of 32 PCA components from variables that had one or more votes from the expert panel. -->
 
 <!-- ```{r} -->
 <!-- autoplot(glmnet_res_32) -->
-<!-- show_best(glmnet_res_32, metric = "rmse") -->
+<!-- show_best(glmnet_res_32, metric = "kap") -->
 <!-- ``` -->
+
+
 
 #### Performance in testing set
 
@@ -115,15 +118,8 @@ Model using the first `r N_pca_to_keep` of 93 PCA components.
 collect_metrics(glmnet_final_93)
 glmnet_final_93 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (93 variables)") +
-  hrbrthemes::theme_ipsum()
-
-
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
+  
 ```
 
 Model using the 7 PCA components from variables that had three or more votes from the expert panel.
@@ -132,13 +128,7 @@ Model using the 7 PCA components from variables that had three or more votes fro
 collect_metrics(glmnet_final_7)
 glmnet_final_7 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (7 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
@@ -149,13 +139,7 @@ Model using the 14 PCA components from variables that had two or more votes from
 collect_metrics(glmnet_final_14)
 glmnet_final_14 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (14 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
@@ -166,20 +150,14 @@ Model using the first `r N_pca_to_keep` of 32 PCA components from variables that
 collect_metrics(glmnet_final_32)
 glmnet_final_32 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (32 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
 
-### Restricted cubic splines
+## Restricted cubic splines
 
-<!-- These are the hyperparameters that have the best RMSE for the elastic net model: -->
+<!-- These are the hyperparameters that have the best kappa statistics for the elastic net model: -->
 
 <!-- Model using the first `r N_pca_to_keep` of 93 PCA components. -->
 
@@ -187,29 +165,31 @@ glmnet_final_32 %>%
 <!-- # collect_metrics(glm_res_rcs) -->
 <!-- # collect_metrics(glmnet_res_rcs) -->
 <!-- autoplot(glmnet_res_93_rcs) -->
-<!-- show_best(glmnet_res_93_rcs, metric = "rmse") -->
+<!-- show_best(glmnet_res_93_rcs, metric = "kap") -->
 <!-- ``` -->
 
 <!-- Model using the 7 PCA components from variables that had three or more votes from the expert panel. -->
 
 <!-- ```{r} -->
 <!-- autoplot(glmnet_res_7_rcs) -->
-<!-- show_best(glmnet_res_7_rcs, metric = "rmse") -->
+<!-- show_best(glmnet_res_7_rcs, metric = "kap") -->
 <!-- ``` -->
 
 <!-- Model using the 14 PCA components from variables that had two or more votes from the expert panel. -->
 
 <!-- ```{r} -->
 <!-- autoplot(glmnet_res_14_rcs) -->
-<!-- show_best(glmnet_res_14_rcs, metric = "rmse") -->
+<!-- show_best(glmnet_res_14_rcs, metric = "kap") -->
 <!-- ``` -->
 
 <!-- Model using the first `r N_pca_to_keep` of 32 PCA components from variables that had one or more votes from the expert panel. -->
 
 <!-- ```{r} -->
 <!-- autoplot(glmnet_res_32_rcs) -->
-<!-- show_best(glmnet_res_32_rcs, metric = "rmse") -->
+<!-- show_best(glmnet_res_32_rcs, metric = "kap") -->
 <!-- ``` -->
+
+
 
 #### Performance in testing set
 
@@ -219,15 +199,8 @@ Model using the first `r N_pca_to_keep` of 93 PCA components.
 collect_metrics(glmnet_final_93_rcs)
 glmnet_final_93_rcs %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (93 variables)") +
-  hrbrthemes::theme_ipsum()
-
-
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
+  
 ```
 
 Model using the 7 PCA components from variables that had three or more votes from the expert panel.
@@ -236,13 +209,7 @@ Model using the 7 PCA components from variables that had three or more votes fro
 collect_metrics(glmnet_final_7_rcs)
 glmnet_final_7_rcs %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (7 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
@@ -253,13 +220,7 @@ Model using the 14 PCA components from variables that had two or more votes from
 collect_metrics(glmnet_final_14_rcs)
 glmnet_final_14_rcs %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (14 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
@@ -270,17 +231,10 @@ Model using the first `r N_pca_to_keep` of 32 PCA components from variables that
 collect_metrics(glmnet_final_32_rcs)
 glmnet_final_32_rcs %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Elastic net - Testing set (32 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
-
 
 ## Random forest
 
@@ -294,15 +248,8 @@ Model using the first `r N_pca_to_keep` of 93 PCA components.
 collect_metrics(rf_final_93)
 rf_final_93 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Random forest - Testing set (93 variables)") +
-  hrbrthemes::theme_ipsum()
-
-
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
+  
 ```
 
 Model using the 7 PCA components from variables that had three or more votes from the expert panel.
@@ -311,13 +258,7 @@ Model using the 7 PCA components from variables that had three or more votes fro
 collect_metrics(rf_final_7)
 rf_final_7 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Random forest - Testing set (7 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
@@ -328,13 +269,7 @@ Model using the 14 PCA components from variables that had two or more votes from
 collect_metrics(rf_final_14)
 rf_final_14 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Random forest - Testing set (14 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```
@@ -345,13 +280,7 @@ Model using the first `r N_pca_to_keep` of 32 PCA components from variables that
 collect_metrics(rf_final_32)
 rf_final_32 %>%
   collect_predictions() %>%
-  cal_plot_regression(
-    truth = vdgcp_slope72m,
-    estimate = .pred,
-    alpha = .5
-  ) +
-  ggtitle("Random forest - Testing set (32 variables)") +
-  hrbrthemes::theme_ipsum()
+  gtsummary::tbl_cross(.pred_class, vdsagesdeliriumever)
 
 
 ```

@@ -16,17 +16,6 @@ sages_combined <- sages_combined %>%
 # glimpse(sages_combined)
 
 
-# Ch 6 - Set up the model
-# set.seed(222)
-# # Put 80% of the data into the training set 
-# sages_split <- rsample::initial_split(sages_combined, prop = .8)
-# 
-# # Create data frames for the two sets:
-# sages_train_pre_rms <- rsample::training(sages_split)
-# sages_test_pre_rms  <- rsample::testing(sages_split)
-
-
-
 # Ch 8 - Create the recipe
 # Start the recipe to do the RMS redundancy analysis
 # Remove variables with (near)zero variance, otherwise the redundancy analysis won't work
@@ -63,7 +52,8 @@ sages_reduced <- recipes::bake(sages_prepped, new_data = sages_combined)
 ### Save the R objects
 saveRDS(sages_juiced_rms,            file=fs::path(r_objects_folder, "060_sages_juiced_rms.rds"))
 saveRDS(sages_reduced,            file=fs::path(r_objects_folder, "060_sages_reduced.rds"))
-saveRDS(sages_recipe,            file=fs::path(r_objects_folder, "060_sages_recipe.rds"))
+# saveRDS(sages_recipe,            file=fs::path(r_objects_folder, "060_sages_recipe.rds"))
+saveRDS(variables_to_keep,            file=fs::path(r_objects_folder, "060_variables_to_keep.rds"))
 
 
 
