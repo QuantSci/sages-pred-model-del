@@ -18,6 +18,7 @@ glmnet_wf_93  <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_93.rds")
 glmnet_wf_7   <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_7.rds"))
 glmnet_wf_14  <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_14.rds"))
 glmnet_wf_32  <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_32.rds"))
+glmnet_wf_rnj  <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_rnj.rds"))
 
 glmnet_wf_93_rcs  <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_93_rcs.rds"))
 glmnet_wf_7_rcs   <- readRDS(file=fs::path(r_objects_folder, "085_glmnet_wf_7_rcs.rds"))
@@ -83,6 +84,15 @@ glmnet_res_14 <- glmnet_wf_14 %>%
   )
 
 glmnet_res_32 <- glmnet_wf_32 %>%
+  tune_grid(
+    resamples = sages_folds,
+    grid = grid_glmnet,
+    # The options below are not required by default
+    control = ctrl,
+    metrics = sages_metrics
+  )
+
+glmnet_res_rnj <- glmnet_wf_rnj %>%
   tune_grid(
     resamples = sages_folds,
     grid = grid_glmnet,
@@ -175,6 +185,7 @@ saveRDS(glmnet_res_93,         file=fs::path(r_objects_folder, "090_glmnet_res_9
 saveRDS(glmnet_res_7,          file=fs::path(r_objects_folder, "090_glmnet_res_7.rds"))
 saveRDS(glmnet_res_14,         file=fs::path(r_objects_folder, "090_glmnet_res_14.rds"))
 saveRDS(glmnet_res_32,         file=fs::path(r_objects_folder, "090_glmnet_res_32.rds"))
+saveRDS(glmnet_res_rnj,         file=fs::path(r_objects_folder, "090_glmnet_res_rnj.rds"))
 saveRDS(glmnet_res_93_rcs,         file=fs::path(r_objects_folder, "090_glmnet_res_93_rcs.rds"))
 saveRDS(glmnet_res_7_rcs,          file=fs::path(r_objects_folder, "090_glmnet_res_7_rcs.rds"))
 saveRDS(glmnet_res_14_rcs,         file=fs::path(r_objects_folder, "090_glmnet_res_14_rcs.rds"))
@@ -188,6 +199,7 @@ collect_metrics(glmnet_res_93)
 collect_metrics(glmnet_res_7)
 collect_metrics(glmnet_res_14)
 collect_metrics(glmnet_res_32)
+collect_metrics(glmnet_res_rnj)
 show_best(glmnet_res_93, metric = "kap")
 show_best(glmnet_res_7, metric = "kap")
 show_best(glmnet_res_14, metric = "kap")
@@ -235,6 +247,13 @@ glmnet_best_32 <- select_best(glmnet_res_32, metric = "kap")
 glmnet_wf_final_32 <- finalize_workflow(glmnet_wf_32, glmnet_best_32)
 glmnet_final_32 <- last_fit(glmnet_wf_final_32, sages_split, metrics = sages_metrics)
 # collect_metrics(glmnet_final_32)
+
+glmnet_best_rnj <- select_best(glmnet_res_rnj, metric = "kap")
+# glmnet_best_rnj
+
+glmnet_wf_final_rnj <- finalize_workflow(glmnet_wf_rnj, glmnet_best_rnj)
+glmnet_final_rnj <- last_fit(glmnet_wf_final_rnj, sages_split, metrics = sages_metrics)
+# collect_metrics(glmnet_final_rnj)
 
 glmnet_best_93_rcs <- select_best(glmnet_res_93_rcs, metric = "kap")
 # glmnet_best_93_rcs
@@ -311,6 +330,7 @@ saveRDS(glmnet_final_93,         file=fs::path(r_objects_folder, "090_glmnet_fin
 saveRDS(glmnet_final_7,          file=fs::path(r_objects_folder, "090_glmnet_final_7.rds"))
 saveRDS(glmnet_final_14,         file=fs::path(r_objects_folder, "090_glmnet_final_14.rds"))
 saveRDS(glmnet_final_32,         file=fs::path(r_objects_folder, "090_glmnet_final_32.rds"))
+saveRDS(glmnet_final_rnj,         file=fs::path(r_objects_folder, "090_glmnet_final_rnj.rds"))
 
 saveRDS(glmnet_final_93_rcs,         file=fs::path(r_objects_folder, "090_glmnet_final_93_rcs.rds"))
 saveRDS(glmnet_final_7_rcs,          file=fs::path(r_objects_folder, "090_glmnet_final_7_rcs.rds"))

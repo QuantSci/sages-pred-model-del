@@ -37,6 +37,10 @@ source(here::here("r", "062-finish_rms.r"))
 source(here::here("r", "065-specify_models.r"))
 source(here::here("r", "070-fit_models.r"))
 
+source(here::here("r", "082-finish_rms_del.r"))
+source(here::here("r", "085-specify_models_del.r"))
+source(here::here("r", "090-fit_models_del.r"))
+
 ```
 
 {{< include _001-vsr-intro.qmd >}}
@@ -49,9 +53,9 @@ source(here::here("r", "070-fit_models.r"))
 
 <!-- {{< include _021-vsr-create_variable_metadata.qmd >}} -->
 
-{{< include _060-vsr-implement_rms.qmd >}}
+<!-- {{< include _060-vsr-implement_rms.qmd >}} -->
 
-{{< include _062-vsr-finish_rms.qmd >}}
+<!-- {{< include _062-vsr-finish_rms.qmd >}} -->
 
 <!-- {{< include _001-intro.qmd >}} -->
 
@@ -65,9 +69,15 @@ source(here::here("r", "070-fit_models.r"))
 
 <!-- {{< include _060-implement_rms.qmd >}} -->
 
-{{< include _065-specify_models.qmd >}}
+<!-- {{< include _065-specify_models.qmd >}} -->
 
 {{< include _070-fit_models.qmd >}}
+
+<!-- {{< include _082-vsr-finish_rms_del.qmd >}} -->
+
+<!-- {{< include _085-specify_models_del.qmd >}} -->
+
+{{< include _090-fit_models_del.qmd >}}
 
 
 

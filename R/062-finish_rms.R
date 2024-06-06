@@ -68,12 +68,26 @@ sages_reduced <- sages_reduced %>%
 # sages_test  <- rsample::testing(sages_split)
 
 
-my_rcs1 <- function(x) {
+my_rcs3_1 <- function(x) {
   rms::rcs(x, 3)[,1]
 }
-my_rcs2 <- function(x) {
+my_rcs3_2 <- function(x) {
   rms::rcs(x, 3)[,2]
 }
+
+my_rcs5_1 <- function(x) {
+  rms::rcs(x, 5)[,1]
+}
+my_rcs5_2 <- function(x) {
+  rms::rcs(x, 5)[,2]
+}
+my_rcs5_3 <- function(x) {
+  rms::rcs(x, 5)[,3]
+}
+my_rcs5_4 <- function(x) {
+  rms::rcs(x, 5)[,4]
+}
+
 # recipe steps
 # For each of these four scenarios:
 # 1. on all the variables
@@ -93,6 +107,9 @@ my_rcs2 <- function(x) {
 # create the restricted cubic splines
 # keep the splines
 
+# Alternative recipe proposed by RNJ:
+# - Use only the variables Age, GCP, and Lives alone
+# - Use restricted cubic splines on Age, GCP
 
 sages_recipe_93_all_pca <- recipes::recipe(vdgcp_slope72m ~ ., data = sages_reduced) %>%
   recipes::step_dummy(all_nominal(), -all_outcomes()) %>%
@@ -105,7 +122,7 @@ sages_recipe_93 <- sages_recipe_93_all_pca  %>%
   step_select(vdgcp_slope72m, all_of(pca93_to_keep))
 
 sages_recipe_93_rcs <- sages_recipe_93 %>%
-  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs1, rcs2 = my_rcs2)) %>%
+  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs3_1, rcs2 = my_rcs3_2)) %>%
   step_select(all_outcomes(), contains("rcs"))
 
 sages_recipe_7_all_pca <- recipes::recipe(vdgcp_slope72m ~ ., data = sages_reduced) %>%
@@ -119,7 +136,7 @@ sages_recipe_7 <- sages_recipe_7_all_pca  %>%
   step_select(vdgcp_slope72m, all_of(pca7_to_keep))
 
 sages_recipe_7_rcs <- sages_recipe_7 %>%
-  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs1, rcs2 = my_rcs2)) %>%
+  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs3_1, rcs2 = my_rcs3_2)) %>%
   step_select(all_outcomes(), contains("rcs"))
 
 sages_recipe_14_all_pca <- recipes::recipe(vdgcp_slope72m ~ ., data = sages_reduced) %>%
@@ -133,7 +150,7 @@ sages_recipe_14 <- sages_recipe_14_all_pca  %>%
   step_select(vdgcp_slope72m, all_of(pca14_to_keep))
 
 sages_recipe_14_rcs <- sages_recipe_14 %>%
-  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs1, rcs2 = my_rcs2)) %>%
+  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs3_1, rcs2 = my_rcs3_2)) %>%
   step_select(all_outcomes(), contains("rcs"))
 
 sages_recipe_32_all_pca <- recipes::recipe(vdgcp_slope72m ~ ., data = sages_reduced) %>%
@@ -147,9 +164,18 @@ sages_recipe_32 <- sages_recipe_32_all_pca  %>%
   step_select(vdgcp_slope72m, all_of(pca32_to_keep))
 
 sages_recipe_32_rcs <- sages_recipe_32 %>%
-  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs1, rcs2 = my_rcs2)) %>%
+  step_mutate_at(all_predictors(), fn = list(rcs1 = my_rcs3_1, rcs2 = my_rcs3_2)) %>%
   step_select(all_outcomes(), contains("rcs"))
 
+sages_recipe_rnj <- recipes::recipe(vdgcp_slope72m ~ ., data = sages_reduced) %>%
+  step_select(all_outcomes(), vdage, vdgcp_rta, vdlivesalone) %>%
+  recipes::step_dummy(all_nominal(), -all_outcomes()) %>%
+  recipes::step_normalize(recipes::all_numeric(), -all_outcomes()) %>%
+  step_mutate_at(vdage, fn = list(rcs1 = my_rcs5_1, rcs2 = my_rcs5_2, rcs3 = my_rcs5_3, rcs4 = my_rcs5_4)) %>%
+  step_mutate_at(vdgcp_rta, fn = list(rcs1 = my_rcs5_1, rcs2 = my_rcs5_2, rcs3 = my_rcs5_3, rcs4 = my_rcs5_4)) %>%
+  step_select(all_outcomes(), contains("rcs"), vdlivesalone_Alone)
+sages_prepped_rnj <- recipes::prep(sages_recipe_rnj)
+sages_juiced_rnj <- recipes::juice(sages_prepped_rnj)
 
 # doing the splines in a different file
 # sages_recipe4 <- sages_recipe3 %>%
@@ -165,6 +191,7 @@ saveRDS(sages_juiced93,           file=fs::path(r_objects_folder, "062_sages_jui
 saveRDS(sages_juiced7,           file=fs::path(r_objects_folder, "062_sages_juiced7.rds"))
 saveRDS(sages_juiced14,           file=fs::path(r_objects_folder, "062_sages_juiced14.rds"))
 saveRDS(sages_juiced32,           file=fs::path(r_objects_folder, "062_sages_juiced32.rds"))
+saveRDS(sages_juiced_rnj,           file=fs::path(r_objects_folder, "062_sages_juiced_rnj.rds"))
 
 # saveRDS(sages_split,       file=fs::path(r_objects_folder, "062_sages_split.rds"))
 # saveRDS(sages_train,       file=fs::path(r_objects_folder, "062_sages_train.rds"))
@@ -182,6 +209,7 @@ saveRDS(sages_recipe_93,     file=fs::path(r_objects_folder, "062_sages_recipe93
 saveRDS(sages_recipe_7,      file=fs::path(r_objects_folder, "062_sages_recipe7.rds"))
 saveRDS(sages_recipe_14,     file=fs::path(r_objects_folder, "062_sages_recipe14.rds"))
 saveRDS(sages_recipe_32,     file=fs::path(r_objects_folder, "062_sages_recipe32.rds"))
+saveRDS(sages_recipe_rnj,     file=fs::path(r_objects_folder, "062_sages_recipe_rnj.rds"))
 
 saveRDS(sages_recipe_93_rcs,     file=fs::path(r_objects_folder, "062_sages_recipe93_rcs.rds"))
 saveRDS(sages_recipe_7_rcs,      file=fs::path(r_objects_folder, "062_sages_recipe7_rcs.rds"))

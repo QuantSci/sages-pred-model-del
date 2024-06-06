@@ -8,6 +8,8 @@ glmnet_res_14 <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_14.rds"
 glmnet_final_14  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_14.rds"))
 glmnet_res_32 <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_32.rds"))
 glmnet_final_32  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_32.rds"))
+glmnet_res_rnj <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_res_rnj.rds"))
+glmnet_final_rnj  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_rnj.rds"))
 
 glmnet_final_93_rcs  <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_93_rcs.rds"))
 glmnet_final_7_rcs   <- readRDS(file=fs::path(r_objects_folder, "070_glmnet_final_7_rcs.rds"))
@@ -51,6 +53,10 @@ The random forest models were fit on four variable sets:
     -   The set of 14 PCA components from the 14 variables that had two or more votes from the expert panel
 
     -   The first `r N_pca_to_keep` PCA components from the 32 variables that had one or more votes from the expert panel
+
+Another elastic net model was proposed by RNJ.  The variables used were:
+
+-   Age, GCP and lives alone.  Restricted cubic splines were added to the model.
 
 
 **Model tuning**
@@ -351,6 +357,27 @@ rf_final_32 %>%
     alpha = .5
   ) +
   ggtitle("Random forest - Testing set (32 variables)") +
+  hrbrthemes::theme_ipsum()
+
+
+```
+
+## Elastic net - RNJ model
+
+#### Performance in testing set
+
+Model proposed by RNJ.
+
+```{r}
+collect_metrics(glmnet_final_rnj)
+glmnet_final_rnj %>%
+  collect_predictions() %>%
+  cal_plot_regression(
+    truth = vdgcp_slope72m,
+    estimate = .pred,
+    alpha = .5
+  ) +
+  ggtitle("Elastic net - RNJ model") +
   hrbrthemes::theme_ipsum()
 
 

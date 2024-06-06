@@ -5,6 +5,7 @@ sages_recipe_93  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe93.
 sages_recipe_7   <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe7.rds"))
 sages_recipe_14  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe14.rds"))
 sages_recipe_32  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe32.rds"))
+sages_recipe_rnj  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe32.rds"))
 
 sages_recipe_93_rcs <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe93_rcs.rds"))
 sages_recipe_7_rcs  <- readRDS(file=fs::path(r_objects_folder, "062_sages_recipe7_rcs.rds"))
@@ -46,6 +47,10 @@ glmnet_wf_14 <- workflows::workflow() %>%
 glmnet_wf_32 <- workflows::workflow() %>%
   workflows::add_model(glmnet_mod) %>%
   workflows::add_recipe(sages_recipe_32)
+
+glmnet_wf_rnj <- workflows::workflow() %>%
+  workflows::add_model(glmnet_mod) %>%
+  workflows::add_recipe(sages_recipe_rnj)
 
 glmnet_wf_93_rcs <- workflows::workflow() %>%
   workflows::add_model(glmnet_mod) %>%
@@ -105,6 +110,10 @@ lgbm_wf_32 <- workflows::workflow() %>%
   add_model(lgbm_mod) %>%
   workflows::add_recipe(sages_recipe_32)
 
+lgbm_wf_rnj <- workflows::workflow() %>% 
+  add_model(lgbm_mod) %>%
+  workflows::add_recipe(sages_recipe_rnj)
+
 
 # saveRDS(glm_wf,            file=fs::path(r_objects_folder, "065_glm_wf.rds"))
 saveRDS(glmnet_wf_93,         file=fs::path(r_objects_folder, "065_glmnet_wf_93.rds"))
@@ -119,6 +128,7 @@ saveRDS(lgbm_wf_14,           file=fs::path(r_objects_folder, "065_lgbm_wf_14.rd
 saveRDS(glmnet_wf_32,         file=fs::path(r_objects_folder, "065_glmnet_wf_32.rds"))
 saveRDS(rf_wf_32,             file=fs::path(r_objects_folder, "065_rf_wf_32.rds"))
 saveRDS(lgbm_wf_32,           file=fs::path(r_objects_folder, "065_lgbm_wf_32.rds"))
+saveRDS(glmnet_wf_rnj,         file=fs::path(r_objects_folder, "065_glmnet_wf_rnj.rds"))
 
 saveRDS(glmnet_wf_93_rcs,         file=fs::path(r_objects_folder, "065_glmnet_wf_93_rcs.rds"))
 saveRDS(glmnet_wf_7_rcs,         file=fs::path(r_objects_folder, "065_glmnet_wf_7_rcs.rds"))
