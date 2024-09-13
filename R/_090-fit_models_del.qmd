@@ -126,6 +126,198 @@ These are the hyperparameters that were tuned:
 
 <!-- ``` -->
 
+```{r}
+
+fold1 <- glmnet_res_rnj %>%
+  slice(1) %>%
+  pull(splits)
+training_truth_fold1 <- testing(fold1[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 1)
+
+fold2 <- glmnet_res_rnj %>%
+  slice(2) %>%
+  pull(splits)
+training_truth_fold2 <- testing(fold2[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 2)
+
+fold3 <- glmnet_res_rnj %>%
+  slice(3) %>%
+  pull(splits)
+training_truth_fold3 <- testing(fold3[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 3)
+
+fold4 <- glmnet_res_rnj %>%
+  slice(4) %>%
+  pull(splits)
+training_truth_fold4 <- testing(fold4[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 4)
+
+fold5 <- glmnet_res_rnj %>%
+  slice(5) %>%
+  pull(splits)
+training_truth_fold5 <- testing(fold5[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 5)
+
+fold6 <- glmnet_res_rnj %>%
+  slice(6) %>%
+  pull(splits)
+training_truth_fold6 <- testing(fold6[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 6)
+
+fold7 <- glmnet_res_rnj %>%
+  slice(7) %>%
+  pull(splits)
+training_truth_fold7 <- testing(fold7[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 7)
+
+fold8 <- glmnet_res_rnj %>%
+  slice(8) %>%
+  pull(splits)
+training_truth_fold8 <- testing(fold8[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 8)
+
+fold9 <- glmnet_res_rnj %>%
+  slice(9) %>%
+  pull(splits)
+training_truth_fold9 <- testing(fold9[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 9)
+
+fold10 <- glmnet_res_rnj %>%
+  slice(10) %>%
+  pull(splits)
+training_truth_fold10 <- testing(fold10[[1]]) %>%
+  select(vdsagesdeliriumever) %>%
+  mutate(fold = 10)
+
+training_truth <- training_truth_fold1 %>%
+  bind_rows(training_truth_fold2) %>%
+  bind_rows(training_truth_fold3) %>%
+  bind_rows(training_truth_fold4) %>%
+  bind_rows(training_truth_fold5) %>%
+  bind_rows(training_truth_fold6) %>%
+  bind_rows(training_truth_fold7) %>%
+  bind_rows(training_truth_fold8) %>%
+  bind_rows(training_truth_fold9) %>%
+  bind_rows(training_truth_fold10) 
+
+glmnet_train_rnj <- collect_predictions(glmnet_res_rnj) %>%
+  select(id, .row, .pred_class) %>%
+  rename(.pred_class_rnj = .pred_class) %>%
+  slice(1:448)
+
+glmnet_train_7 <- collect_predictions(glmnet_res_7) %>%
+  select(id, .row, .pred_class) %>%
+  rename(.pred_class_7 = .pred_class) %>%
+  slice(1:448)
+
+glmnet_train_14 <- collect_predictions(glmnet_res_14) %>%
+  select(id, .row, .pred_class) %>%
+  rename(.pred_class_14 = .pred_class) %>%
+  slice(1:448)
+
+glmnet_train_32 <- collect_predictions(glmnet_res_32) %>%
+  select(id, .row, .pred_class) %>%
+  rename(.pred_class_32 = .pred_class) %>%
+  slice(1:448)
+
+glmnet_train_93 <- collect_predictions(glmnet_res_93) %>%
+  select(id, .row, .pred_class) %>%
+  rename(.pred_class_93 = .pred_class) %>%
+  slice(1:448)
+
+foo <- training_truth %>%
+  bind_cols(glmnet_train_7) %>%
+  bind_cols(glmnet_train_14) %>%
+  bind_cols(glmnet_train_32) %>%
+  bind_cols(glmnet_train_93) %>%
+  bind_cols(glmnet_train_rnj) 
+```
+
+```{r}
+my_kappa_table <- function(df, x, y) {
+  
+  foo <- df %>%
+    select({{x}}, {{y}}) 
+  
+  goo <- table(foo)
+  hoo <- vcd::Kappa(goo)
+
+  kappa_table <- tibble(n = dim(foo)[1], 
+                        value = hoo$Weighted[1], 
+                        z = hoo$Weighted[1]/hoo$Weighted[2], 
+                        p_value = 2*pnorm(-abs(z)))
+  
+  kappa_table %>%
+    gt() %>%
+    # tab_header("Cohen's Kappa for 2 Raters") %>%
+    cols_label(
+      value = "Weighted Kappa",
+      z = "z",
+      p_value = "p-value"
+    ) %>%
+    fmt_number(
+      columns = c(value),
+      decimals = 3
+    ) %>%
+    fmt_number(
+      columns = c(z),
+      decimals = 2
+    ) %>%
+    fmt(
+      columns = c(p_value),
+      fns = function(x) {
+        gtsummary::style_pvalue(x)
+      }
+    ) 
+}
+```
+
+#### Performance in training set
+
+Model using the first 7 of 93 PCA components.
+
+```{r}
+gtsummary::tbl_cross(foo, .pred_class_7, vdsagesdeliriumever)
+my_kappa_table(foo, .pred_class_7, vdsagesdeliriumever)
+```
+
+Model using the first 14 of 93 PCA components.
+
+```{r}
+gtsummary::tbl_cross(foo, .pred_class_14, vdsagesdeliriumever)
+my_kappa_table(foo, .pred_class_14, vdsagesdeliriumever)
+```
+
+Model using the first 32 of 93 PCA components.
+
+```{r}
+gtsummary::tbl_cross(foo, .pred_class_32, vdsagesdeliriumever)
+my_kappa_table(foo, .pred_class_32, vdsagesdeliriumever)
+```
+
+Model using all 93 PCA components.
+
+```{r}
+gtsummary::tbl_cross(foo, .pred_class_93, vdsagesdeliriumever)
+my_kappa_table(foo, .pred_class_93, vdsagesdeliriumever)
+```
+
+Model using the variables RNJ suggested.
+
+```{r}
+gtsummary::tbl_cross(foo, .pred_class_rnj, vdsagesdeliriumever)
+
+```
+
 #### Performance in testing set
 
 Model using the first `r N_pca_to_keep` of 93 PCA components.
